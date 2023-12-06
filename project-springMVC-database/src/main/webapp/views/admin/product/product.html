@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <th:block th:insert="/admin/layouts/head.html"></th:block>
+</head>
+
+<body>
+<div class="wrapper">
+    <nav id="sidebar" class="sidebar js-sidebar">
+        <div class="sidebar-content js-simplebar">
+            <a class="sidebar-brand" href="../index.html">
+                <span class="align-middle">AdminKit</span>
+            </a>
+
+            <ul class="sidebar-nav">
+                <li class="sidebar-header">
+                    Pages
+                </li>
+                <li class="sidebar-item ">
+                    <a class="sidebar-link" href="/admin">
+                        <i class="align-middle" data-feather="grid"></i> <span class="align-middle">Index</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/admin/category">
+                        <i class="align-middle" data-feather="grid"></i> <span class="align-middle">Category</span>
+                    </a>
+                </li>
+                <li class="sidebar-item active">
+                    <a class="sidebar-link" href="/admin/product">
+                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Product</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/admin/user">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">User</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main">
+        <th:block th:insert="/admin/layouts/navbar.html"></th:block>
+
+        <main class="content">
+            <div class="container-fluid p-0">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Demo Product Table</h3>
+                        <nav class="navbar navbar-expand-lg bg-light">
+                            <div class="container-fluid">
+                                <a class="navbar-brand" href="#">
+                                    <button type="button" class="btn btn-success">+ Add new Product</button>
+                                </a>
+                                <form class="d-flex" role="search">
+                                    <input class="form-control me-2 fst-italic" type="search"
+                                           placeholder="Enter product's name... "
+                                           aria-label="Search">
+                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                                </form>
+                            </div>
+                        </nav>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped text-center">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Description</th>
+                                <th>Created Date</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Category</th>
+                                <th colspan="2">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Product 1</td>
+                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
+                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td>28/10/2022</td>
+                                <td>100 $</td>
+                                <td>Ready</td>
+                                <td>Category 1</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Product 2</td>
+                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
+                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td>28/10/2022</td>
+                                <td>100 $</td>
+                                <td>Ready</td>
+                                <td>Category 2</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Product 3</td>
+                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
+                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td>28/10/2022</td>
+                                <td>100 $</td>
+                                <td>Ready</td>
+                                <td>Category 3</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Product 4</td>
+                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
+                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td>28/10/2022</td>
+                                <td>100 $</td>
+                                <td>Ready</td>
+                                <td>Category 4</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Product 5</td>
+                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
+                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td>28/10/2022</td>
+                                <td>100 $</td>
+                                <td>Ready</td>
+                                <td>Category 5</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>Product 6</td>
+                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
+                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td>28/10/2022</td>
+                                <td>100 $</td>
+                                <td>Ready</td>
+                                <td>Category 6</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>Product 7</td>
+                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
+                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td>28/10/2022</td>
+                                <td>100 $</td>
+                                <td>Ready</td>
+                                <td>Category 7</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Product 8</td>
+                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
+                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td>28/10/2022</td>
+                                <td>100 $</td>
+                                <td>Ready</td>
+                                <td>Category 8</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>Product 9</td>
+                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
+                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td>28/10/2022</td>
+                                <td>100 $</td>
+                                <td>Ready</td>
+                                <td>Category 9</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>Product 10</td>
+                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
+                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
+                                <td>28/10/2022</td>
+                                <td>100 $</td>
+                                <td>Ready</td>
+                                <td>Category 10</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">Edit</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <nav aria-label="Page navigation example ">
+                        <ul class="pagination float-end mx-4">
+                            <li class="page-item disabled">
+                                <a class="page-link">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </main>
+
+        <th:block th:insert="/admin/layouts/footer.html"></th:block>
+    </div>
+</div>
+
+<th:block th:insert="/admin/layouts/script.html"></th:block>
+
+</body>
+
+
+</html>

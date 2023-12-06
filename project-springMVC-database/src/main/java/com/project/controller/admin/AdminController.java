@@ -11,13 +11,10 @@ public class AdminController {
         return "admin/index";
     }
 
-    @RequestMapping("/category")
-    public String categoryManagement() {
-        return "admin/category";
-    }
+
     @RequestMapping("/product")
     public String productManagement() {
-        return "admin/product";
+        return "admin/product/product";
     }
     @RequestMapping("/user")
     public String userManagement() {

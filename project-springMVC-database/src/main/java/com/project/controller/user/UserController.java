@@ -26,5 +26,5 @@ public class UserController {
     public String getListProduct() {
         return "user/list-product";
     }
-    
+
 }

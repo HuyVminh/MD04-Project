@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:insert="/admin/layouts/head.html"></th:block>
+</head>
+
+<body>
+<div class="wrapper">
+    <nav id="sidebar" class="sidebar js-sidebar">
+        <div class="sidebar-content js-simplebar">
+            <a class="sidebar-brand" href="../index.html">
+                <span class="align-middle">AdminKit</span>
+            </a>
+
+            <ul class="sidebar-nav">
+                <li class="sidebar-header">
+                    Pages
+                </li>
+                <li class="sidebar-item ">
+                    <a class="sidebar-link" href="/admin">
+                        <i class="align-middle" data-feather="grid"></i> <span class="align-middle">Index</span>
+                    </a>
+                </li>
+                <li class="sidebar-item active">
+                    <a class="sidebar-link" href="/admin/category">
+                        <i class="align-middle" data-feather="grid"></i> <span class="align-middle">Category</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/admin/product">
+                        <i class="align-middle" data-feather="square"></i> <span class="align-middle">Product</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/admin/user">
+                        <i class="align-middle" data-feather="user"></i> <span class="align-middle">User</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main">
+        <th:block th:insert="/admin/layouts/navbar.html"></th:block>
+
+        <main class="content">
+            <div class="container-fluid p-0">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Demo Category Table</h3>
+                        <nav class="navbar navbar-expand-lg bg-light">
+                            <div class="container-fluid">
+                                <a class="navbar-brand" href="/admin/category/add-category">
+                                    <button type="button" class="btn btn-success">+ Add new Category</button>
+                                </a>
+                                <form class="d-flex" role="search">
+                                    <input class="form-control me-2 fst-italic" type="search"
+                                           placeholder="Enter category's name... "
+                                           aria-label="Search">
+                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                                </form>
+                            </div>
+                        </nav>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped text-center">
+                            <thead>
+                            <tr>
+                                <th>Category ID</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th colspan="2">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="categories">
+                            <tr th:each="item:${categories}">
+                                <td th:text="${item.getCategoryId()}"></td>
+                                <td th:text="${item.getCategoryName()}"></td>
+                                <td th:text="${item.getDescription()}"></td>
+                                <td><span class="label"
+                                          th:classappend="${!item.isStatus() ? 'label-danger':'label-success'}"
+                                          th:text="${item.isStatus()?'Active':'Block'}"></span></td>
+                                <td>
+                                    <a type="button" class="btn btn-warning" th:href="@{/admin/category/edit-category/{categoryId}(categoryId=${item.categoryId})}">Edit</a>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn"
+                                            th:classappend="${item.isStatus()?'btn-success':'btn-danger'}">Block
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <nav aria-label="Page navigation example ">
+                        <ul class="pagination float-end mx-4">
+                            <li class="page-item disabled">
+                                <a class="page-link">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </main>
+
+        <th:block th:insert="/admin/layouts/footer.html"></th:block>
+    </div>
+</div>
+
+<th:block th:insert="/admin/layouts/script.html"></th:block>
+
+</body>
+
+>>>>>>> ec29542e3b58de09fae1b5010409bd981c248138
+</html>
