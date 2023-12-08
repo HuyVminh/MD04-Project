@@ -55,10 +55,9 @@
                                 <a class="navbar-brand" href="/admin/category/add-category">
                                     <button type="button" class="btn btn-success">+ Add new Category</button>
                                 </a>
-                                <form class="d-flex" role="search">
-                                    <input class="form-control me-2 fst-italic" type="search"
-                                           placeholder="Enter category's name... "
-                                           aria-label="Search">
+                                <form class="d-flex" role="search" th:action="@{/admin/category/search}" method="post">
+                                    <input class="form-control me-2 fst-italic" type="search" name="nameSearch"
+                                           placeholder="Enter category's name..." aria-label="Search">
                                     <button class="btn btn-outline-success" type="submit">Search</button>
                                 </form>
                             </div>
@@ -70,8 +69,8 @@
                             <thead>
                             <tr>
                                 <th>Category ID</th>
-                                <th>Name</th>
-                                <th>Description</th>
+                                <th class="w-25">Name</th>
+                                <th class="w-50">Description</th>
                                 <th>Status</th>
                                 <th colspan="2">Action</th>
                             </tr>
@@ -82,15 +81,19 @@
                                 <td th:text="${item.getCategoryName()}"></td>
                                 <td th:text="${item.getDescription()}"></td>
                                 <td><span class="label"
-                                          th:classappend="${!item.isStatus() ? 'label-danger':'label-success'}"
+                                          th:classappend="${item.isStatus() ? 'badge bg-info text-dark':'badge bg-warning text-dark'}"
                                           th:text="${item.isStatus()?'Active':'Block'}"></span></td>
                                 <td>
-                                    <a type="button" class="btn btn-warning" th:href="@{/admin/category/edit-category/{categoryId}(categoryId=${item.categoryId})}">Edit</a>
+                                    <a type="button" class="btn btn-warning"
+                                       th:href="@{/admin/category/edit-category/{categoryId}(categoryId=${item.categoryId})}">Edit</a>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn"
-                                            th:classappend="${item.isStatus()?'btn-success':'btn-danger'}">Block
-                                    </button>
+                                    <a type="button" class="btn"
+                                       th:classappend="${item.isStatus()?'btn-danger':'btn-success'}"
+                                       th:href="@{/admin/category/{categoryId}(categoryId=${item.categoryId})}"
+                                       onclick="return confirm('Are you sure you want to block this category?')"
+                                    ><span th:text="${item.isStatus() ? 'Block' : 'Active'}"></span>
+                                    </a>
                                 </td>
                             </tr>
                             </tbody>

@@ -7,7 +7,7 @@ import java.util.List;
 public interface ICategoryService {
     List<Category> findAll();
     Category findById(Integer id);
-    Category findByName(String name);
+    List<Category> findByName(String name);
     boolean saveOrUpdate(Category category);
     void block(Integer id);
 }

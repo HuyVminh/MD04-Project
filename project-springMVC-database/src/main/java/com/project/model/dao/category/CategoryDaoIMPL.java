@@ -61,8 +61,29 @@ public class CategoryDaoIMPL implements ICategoryDAO {
     }
 
     @Override
-    public Category findByName(String name) {
-        return null;
+    public List<Category> findByName(String name) {
+        Connection connection = null;
+        List<Category> foundList = new ArrayList<>();
+        try {
+            connection = ConnectionDatabase.openConnection();
+            CallableStatement callableStatement = connection.prepareCall("{CALL PROC_FIND_CATEGORY_BY_NAME(?)}");
+            String nameSearch = name.toLowerCase().trim();
+            callableStatement.setString(1, nameSearch);
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()) {
+                Category category = new Category();
+                category.setCategoryId(resultSet.getInt("id"));
+                category.setCategoryName(resultSet.getString("name"));
+                category.setDescription(resultSet.getString("description"));
+                category.setStatus(resultSet.getBoolean("status"));
+                foundList.add(category);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+        return foundList;
     }
 
     @Override
@@ -77,11 +98,10 @@ public class CategoryDaoIMPL implements ICategoryDAO {
                 callableStatement.setString(2, category.getDescription());
                 check = callableStatement.executeUpdate();
             } else {
-                CallableStatement callableStatement = connection.prepareCall("{CALL PROC_UPDATE_CATEGORY(?,?,?,?)}");
+                CallableStatement callableStatement = connection.prepareCall("{CALL PROC_UPDATE_CATEGORY(?,?,?)}");
                 callableStatement.setInt(1, category.getCategoryId());
                 callableStatement.setString(2, category.getCategoryName());
                 callableStatement.setString(3, category.getDescription());
-                callableStatement.setBoolean(4, category.isStatus());
                 check = callableStatement.executeUpdate();
             }
             if (check > 0) {
@@ -97,6 +117,17 @@ public class CategoryDaoIMPL implements ICategoryDAO {
 
     @Override
     public void block(Integer id) {
-
+        Connection connection = null;
+        connection = ConnectionDatabase.openConnection();
+        CallableStatement callableStatement = null;
+        try {
+            callableStatement = connection.prepareCall("{CALL PROC_BLOCK_CATEGORY(?)}");
+            callableStatement.setInt(1, id);
+            callableStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
     }
 }

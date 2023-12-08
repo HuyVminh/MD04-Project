@@ -50,4 +50,16 @@ public class CategoryController {
         redirectAttributes.addFlashAttribute("mess", "Cập nhật thành công !");
         return "redirect:/admin/category";
     }
+    @GetMapping("/category/{id}")
+    public String blockCategory(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        categoryService.block(id);
+        redirectAttributes.addFlashAttribute("mess", "Cập nhật thành công !");
+        return "redirect:/admin/category";
+    }
+    @PostMapping("/category/search")
+    public String search(@RequestParam("nameSearch") String name,Model model){
+        List<Category> categories = categoryService.findByName(name);
+        model.addAttribute("categories", categories);
+        return "admin/category/category";
+    }
 }

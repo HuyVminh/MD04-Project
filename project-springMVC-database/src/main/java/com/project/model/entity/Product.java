@@ -8,20 +8,22 @@ public class Product {
     private String description;
     private float price;
     private Category category;
-    private List<Comment> comments;
-    private List<Image> images;
+    private boolean status;
+    private int stock;
+    private List<String> imageUrls;
 
     public Product() {
     }
 
-    public Product(int productId, String productName, String description, float price, Category category, List<Comment> comments, List<Image> images) {
+    public Product(int productId, String productName, String description, float price, Category category, boolean status, int stock, List<String> imageUrls) {
         this.productId = productId;
         this.productName = productName;
         this.description = description;
         this.price = price;
         this.category = category;
-        this.comments = comments;
-        this.images = images;
+        this.status = status;
+        this.stock = stock;
+        this.imageUrls = imageUrls;
     }
 
     public int getProductId() {
@@ -64,19 +66,27 @@ public class Product {
         this.category = category;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public boolean isStatus() {
+        return status;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
-    public List<Image> getImages() {
-        return images;
+    public int getStock() {
+        return stock;
     }
 
-    public void setImages(List<Image> images) {
-        this.images = images;
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 }
