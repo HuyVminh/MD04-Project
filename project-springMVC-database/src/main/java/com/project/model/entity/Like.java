@@ -1,6 +1,7 @@
 package com.project.model.entity;
 
 public class Like {
+    private int id;
     private int productId;
     private int userId;
 

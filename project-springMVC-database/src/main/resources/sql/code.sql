@@ -123,24 +123,47 @@ end
 //
 -- --------------------------------------------------------
 
-create table user(
-    id int primary key auto_increment,
+-- ------------------------USER----------------------------
+create table user
+(
+    id       int primary key auto_increment,
     username varchar(255) not null unique,
     fullname varchar(255),
-    email varchar(255) not null unique,
+    email    varchar(255) not null unique,
     password varchar(255) not null,
-    avatar varchar(255),
-    address text,
-    phone varchar(255),
-    role boolean default true,
-    status boolean default true
+    avatar   varchar(255),
+    address  text,
+    phone    varchar(255),
+    role     boolean default true,
+    status   boolean default true
 );
 
-create table cart(
-    id int primary key auto_increment,
-    user_id int,
-    foreign key (user_id) references user(id),
+create table cart
+(
+    id         int primary key auto_increment,
+    user_id    int,
+    foreign key (user_id) references user (id),
     product_id int,
-    foreign key (product_id) references product(id),
-    quantity int default 0
+    foreign key (product_id) references product (id),
+    quantity   int default 0
 );
+
+delimiter //
+create procedure PROC_SHOW_USER()
+begin
+    select * from user where role = true;
+end;
+
+create procedure PROC_FIND_USER_BY_ID(in user_id int)
+begin
+    select * from user where id = user_id and role = true;
+end;
+
+create procedure PROC_ADD_USER(in u_name varchar(255),
+                               in u_email varchar(255),
+                               in u_pass varchar(255),
+                               in u_phone varchar(255))
+begin
+    insert into user(username, email, password, phone) values (u_name, u_email, u_pass, u_phone);
+end
+//
