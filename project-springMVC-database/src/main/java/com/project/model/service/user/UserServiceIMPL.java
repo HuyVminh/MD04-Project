@@ -1,7 +1,10 @@
 package com.project.model.service.user;
 
 import com.project.model.dao.user.IUserDAO;
+import com.project.model.dto.user.UserRegisterDTO;
 import com.project.model.entity.User;
+import org.mindrot.jbcrypt.BCrypt;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,21 +22,32 @@ public class UserServiceIMPL implements IUserService {
 
     @Override
     public User findById(Integer id) {
-        return userDAO.findById(id);
+        return null;
     }
 
     @Override
-    public List<User> findByName(String name) {
-        return userDAO.findByName(name);
+    public User findByEmail(String email) {
+        return userDAO.findByEmail(email);
     }
 
     @Override
-    public boolean saveOrUpdate(User user) {
-        return userDAO.saveOrUpdate(user);
+    public boolean register(UserRegisterDTO user) {
+        User user1 = new User();
+        user1.setUserName(user.getUserName());
+        user1.setEmail(user.getEmail());
+        user1.setPhone(user.getPhone());
+        String hashPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12));
+        user1.setPassword(hashPassword);
+        return userDAO.register(user1);
+    }
+
+    @Override
+    public User login(String email, String password) {
+        return null;
     }
 
     @Override
     public void block(Integer id) {
-        userDAO.block(id);
+
     }
 }

@@ -8,7 +8,8 @@ import java.util.List;
 public interface IUserDAO {
     List<User> findAll();
     User findById(Integer id);
-    List<User> findByName(String name);
-    boolean saveOrUpdate(User user);
+    User findByEmail(String email);
+    boolean register(User user);
+    User login(String email,String password);
     void block(Integer id);
 }

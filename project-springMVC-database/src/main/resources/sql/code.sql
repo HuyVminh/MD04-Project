@@ -154,9 +154,9 @@ begin
     select * from user where role = true;
 end;
 
-create procedure PROC_FIND_USER_BY_ID(in user_id int)
+create procedure PROC_FIND_USER_BY_EMAIL(in u_email int)
 begin
-    select * from user where id = user_id and role = true;
+    select * from user where email = u_email and role = true;
 end;
 
 create procedure PROC_ADD_USER(in u_name varchar(255),

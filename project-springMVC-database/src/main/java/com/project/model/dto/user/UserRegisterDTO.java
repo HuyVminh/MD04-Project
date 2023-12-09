@@ -1,52 +1,40 @@
 package com.project.model.dto.user;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 public class UserRegisterDTO {
     @NotEmpty(message = "Không được để trống !")
     private String userName;
-
-    private String fullName;
     @Email(message = "Phải chứa ký tự '@' !")
     private String email;
-    @Size(min = 6,max = 20)
+    @Size(min = 6,max = 20,message = "Phải chứa từ 6 đến 20 ký tự !")
     private String password;
-    private String avatar;
-    private String address;
-    @NotEmpty(message = "Không được để rỗng !")
+    @Size(min = 6,max = 20,message = "Phải chứa từ 6 đến 20 ký tự !")
+    private String confirmPassword;
+
+    @Pattern(regexp = "(0[3|5|7|8|9])+([0-9]{8})\\b",message = "Không đúng định dạng số điện thoại !")
     private String phone;
-    private boolean status = true;
 
     public UserRegisterDTO() {
     }
 
-    public UserRegisterDTO(String userName, String fullName, String email, String password, String avatar, String address, String phone, boolean status) {
+    public UserRegisterDTO(String userName, String email, String password, String confirmPassword, String phone) {
         this.userName = userName;
-        this.fullName = fullName;
         this.email = email;
         this.password = password;
-        this.avatar = avatar;
-        this.address = address;
+        this.confirmPassword = confirmPassword;
         this.phone = phone;
-        this.status = status;
     }
-
+    @AssertTrue(message = "Mật khẩu không khớp")
+    public boolean isPasswordMatch() {
+        return password.equals(confirmPassword);
+    }
     public String getUserName() {
         return userName;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -65,20 +53,12 @@ public class UserRegisterDTO {
         this.password = password;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getPhone() {
@@ -87,13 +67,5 @@ public class UserRegisterDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
     }
 }

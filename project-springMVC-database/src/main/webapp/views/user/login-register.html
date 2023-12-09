@@ -45,76 +45,64 @@
                     <div class="page-content-wrapper">
                         <div class="row">
                             <div class="col-sm-12 col-md-12 col-xs-12 col-lg-6">
-                                <!-- Login Form s-->
-                                <form action="#">
-
+                                <!-- Login Form-->
+                                <div class="alert alert-danger" role="alert" th:if="${err != null}">
+                                    <strong><span th:text="${err}"></span></strong>
+                                </div>
+                                <form method="post" th:action="@{/login}" th:object="${user}">
                                     <div class="login-form">
                                         <h4 class="login-title">Login</h4>
-
                                         <div class="row">
                                             <div class="col-md-12 col-12">
                                                 <label>Email Address*</label>
-                                                <input type="email" placeholder="Email Address">
+                                                <input type="text" placeholder="Email Address" th:field="*{email}">
                                             </div>
                                             <div class="col-12">
                                                 <label>Password</label>
-                                                <input type="password" placeholder="Password">
+                                                <input type="password" placeholder="Password" th:field="*{password}">
                                             </div>
-                                            <div class="col-sm-6">
-
-                                                <div class="check-box d-inline-block ml-0 ml-md-2">
-                                                    <input type="checkbox" id="remember_me">
-                                                    <label for="remember_me">Remember me</label>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="col-sm-6 text-start text-sm-end">
-                                                <a href="#" class="forget-pass-link"> Forgotten pasward?</a>
-                                            </div>
-
                                             <div class="col-md-12">
-                                                <button class="register-button">Login</button>
+                                                <button class="register-button" type="submit">Login</button>
                                             </div>
-
                                         </div>
                                     </div>
-
                                 </form>
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
-                                <form action="#">
-
+                                <form th:action="@{/register}" th:object="${user}" method="post">
                                     <div class="login-form">
                                         <h4 class="login-title">Register</h4>
-
                                         <div class="row">
-                                            <div class="col-md-6 col-12 mb-20">
-                                                <label>First Name</label>
-                                                <input type="text" placeholder="First Name">
+                                            <div class="col-md-6 col-12 mb-3">
+                                                <label>Username</label>
+                                                <input type="text" placeholder="Username" th:field="*{userName}">
+                                                <small class="form-text text-danger" th:errors="*{userName}"></small>
                                             </div>
-                                            <div class="col-md-6 col-12 mb-20">
-                                                <label>Last Name</label>
-                                                <input type="text" placeholder="Last Name">
+                                            <div class="col-md-6 col-12 mb-3">
+                                                <label>Phone Number</label>
+                                                <input type="text" placeholder="Phone Number" th:field="*{phone}">
+                                                <small class="form-text text-danger" th:errors="*{phone}"></small>
                                             </div>
-                                            <div class="col-md-12 mb-20">
+                                            <div class="col-md-12 mb-3">
                                                 <label>Email Address*</label>
-                                                <input type="email" placeholder="Email Address">
+                                                <input type="text" placeholder="Email Address" th:field="*{email}">
+                                                <small class="form-text text-danger" th:errors="*{email}"></small>
                                             </div>
-                                            <div class="col-md-6 mb-20">
+                                            <div class="col-md-6 mb-3">
                                                 <label>Password</label>
-                                                <input type="password" placeholder="Password">
+                                                <input type="password" placeholder="Password" th:field="*{password}">
+                                                <small class="form-text text-danger" th:errors="*{password}"></small>
                                             </div>
-                                            <div class="col-md-6 mb-20">
+                                            <div class="col-md-6 mb-3">
                                                 <label>Confirm Password</label>
-                                                <input type="password" placeholder="Confirm Password">
+                                                <input type="password" placeholder="Confirm Password" th:field="*{confirmPassword}">
+                                                <small class="form-text text-danger" th:text="${#fields.hasErrors('confirmPassword') ? 'Mật khẩu không khớp !' : ''}"></small>
                                             </div>
                                             <div class="col-12">
-                                                <button class="register-button mt-0">Register</button>
+                                                <button class="register-button mt-0" type="submit">Register</button>
                                             </div>
                                         </div>
                                     </div>
-
                                 </form>
                             </div>
                         </div>
