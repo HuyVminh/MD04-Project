@@ -252,13 +252,13 @@
                                 <div class="header-settings-icon">
                                     <a href="javascript:void(0)" class="header-settings-trigger"
                                        id="header-settings-trigger">
-                                        <div class="setting-button">
+                                        <div class="setting-button"  th:if="${session.userLogin == null}">
                                             <span></span>
                                             <span></span>
                                             <span></span>
                                         </div>
+                                        <img th:src="${session.userLogin.getAvatar()}" th:unless="${session.userLogin == null}" width="50px">
                                     </a>
-
                                     <!-- settings menu -->
                                     <div class="settings-menu-wrapper" id="settings-menu-wrapper">
                                         <div class="single-settings-block" th:if="${session.userLogin == null}">
@@ -268,11 +268,11 @@
                                             </ul>
                                         </div>
                                         <div class="single-settings-block" th:unless="${session.userLogin == null}">
-                                            <h4 class="title"><span th:text="${'Xin chào, ' + session.userLogin.userName }"></span></h4>
+                                            <h4 class="title"><span th:text="${'Xin chào, ' + session.userLogin.userName }" class="text-warning"></span></h4>
                                             <ul>
-                                                <li><a href="logout">Information</a></li>
-                                                <li><a href="logout">Wish List</a></li>
-                                                <li><a href="logout">Cart</a></li>
+                                                <li><a href="my-account">Information</a></li>
+                                                <li><a href="wishlist">Wish List</a></li>
+                                                <li><a href="cart">Cart</a></li>
                                                 <li><a href="logout">Logout</a></li>
                                             </ul>
                                         </div>

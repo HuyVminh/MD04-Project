@@ -14,16 +14,18 @@ public class UserRegisterDTO {
 
     @Pattern(regexp = "(0[3|5|7|8|9])+([0-9]{8})\\b",message = "Không đúng định dạng số điện thoại !")
     private String phone;
+    private String avatar;
 
     public UserRegisterDTO() {
     }
 
-    public UserRegisterDTO(String userName, String email, String password, String confirmPassword, String phone) {
+    public UserRegisterDTO(String userName, String email, String password, String confirmPassword, String phone,String avatar) {
         this.userName = userName;
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;
         this.phone = phone;
+        this.avatar = avatar;
     }
     @AssertTrue(message = "Mật khẩu không khớp")
     public boolean isPasswordMatch() {
@@ -67,5 +69,13 @@ public class UserRegisterDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

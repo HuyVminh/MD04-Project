@@ -6,6 +6,8 @@ import com.project.model.service.user.IUserService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,13 +15,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 @Controller
+@PropertySource("classpath:config.properties")
 public class UserController {
+    @Value("${path_avatar}")
+    private String path;
     @Autowired
     private IUserService userService;
     @Autowired
@@ -50,6 +60,16 @@ public class UserController {
         return "user/list-product";
     }
 
+    @RequestMapping("/my-account")
+    public String getMyAccount() {
+        return "user/my-account";
+    }
+
+    @RequestMapping("/wishlist")
+    public String getWishlist() {
+        return "user/wishlist";
+    }
+
     @GetMapping("/login-register")
     public String getLoginRegister(Model model) {
         UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
@@ -58,7 +78,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String handleRegister(@Valid @ModelAttribute("user") UserRegisterDTO user, BindingResult result, HttpSession session) {
+    public String handleRegister(@Valid @ModelAttribute("user") UserRegisterDTO user, BindingResult result, HttpSession session, MultipartFile file) {
         if (result.hasErrors()) {
             return "/user/login-register";
         } else {
@@ -79,9 +99,17 @@ public class UserController {
     @PostMapping("/login")
     public String handleLogin(@ModelAttribute("user") UserRegisterDTO user, RedirectAttributes redirectAttributes) {
         User user_check = userService.findByEmail(user.getEmail());
-        if (user.getEmail().equals(user_check.getEmail()) && BCrypt.checkpw(user.getPassword(), user_check.getPassword()) && user_check.isRole()) {
-            session.setAttribute("userLogin", user_check);
-            return "redirect:/";
+        if (user_check.getEmail() != null) {
+            if (BCrypt.checkpw(user.getPassword(), user_check.getPassword()) && !user_check.isRole()) {
+                session.setAttribute("adminLogin", user_check);
+                return "redirect:/admin";
+            }
+            if (BCrypt.checkpw(user.getPassword(), user_check.getPassword()) && user_check.isRole()) {
+                session.setAttribute("userLogin", user_check);
+                return "redirect:/";
+            }
+            redirectAttributes.addFlashAttribute("err", "Email hoặc mật khẩu không đúng !");
+            return "redirect:/login-register";
         }
         redirectAttributes.addFlashAttribute("err", "Email hoặc mật khẩu không đúng !");
         return "redirect:/login-register";
