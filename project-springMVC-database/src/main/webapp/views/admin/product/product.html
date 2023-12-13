@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,7 +52,7 @@
                         <h3 class="card-title">Demo Product Table</h3>
                         <nav class="navbar navbar-expand-lg bg-light">
                             <div class="container-fluid">
-                                <a class="navbar-brand" href="#">
+                                <a class="navbar-brand" href="/admin/product/add-product">
                                     <button type="button" class="btn btn-success">+ Add new Product</button>
                                 </a>
                                 <form class="d-flex" role="search">
@@ -66,184 +65,49 @@
                         </nav>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped text-center">
+                    <div class="card-body scroll-bar">
+                        <div th:if="${mess!=null}"
+                             class="alert alert-primary alert-dismissible fade show"
+                             role="alert" id="alertMessage">
+                            <strong th:text="${mess}"></strong>
+                        </div>
+                        <table id="example1" class="table table-bordered table-striped text-center overflow-auto">
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
                                 <th>Image</th>
-                                <th>Description</th>
-                                <th>Created Date</th>
-                                <th>Price</th>
+                                <th class="w-25">Name</th>
+                                <th class="w-50">Description</th>
+                                <th>Category Name</th>
+                                <th class="w-25">Price</th>
+                                <th>Stock</th>
                                 <th>Status</th>
-                                <th>Category</th>
-                                <th colspan="2">Action</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Product 1</td>
-                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
-                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                <td>28/10/2022</td>
-                                <td>100 $</td>
-                                <td>Ready</td>
-                                <td>Category 1</td>
+                            <tr th:each="item : ${products}">
+                                <td th:text="${item.getProductId()}"></td>
+                                <td><img th:src="${item.imageUrl}" width="80px" alt="#"></td>
+                                <td th:text="${item.getProductName()}"></td>
+                                <td><span th:text="${item.getDescription().length() < 100 ? item.getDescription() : item.getDescription().substring(0,100)}"></span></td>
+                                <td th:text="${item.getCategory().getCategoryName()}"></td>
+                                <td><span th:text="${#numbers.formatDecimal(item.getPrice(), 0, 'COMMA', 0, 'POINT') + ' VND'}"></span></td>
+                                <td th:text="${item.getStock()}"></td>
                                 <td>
-                                    <button type="button" class="btn btn-warning">Edit</button>
+                                    <a type="button" class="btn"
+                                       th:classappend="${item.isStatus()?'btn-success':'btn-danger'}"
+                                       th:href="@{/admin/product/{productId}(productId=${item.productId})}"
+                                       th:attr="onclick=${item.isStatus() ? 'return confirm(`Bạn có chắc muốn khóa danh mục này ?`)' : 'return confirm(`Bạn có chắc muốn mở khóa danh mục này ?`)' }">
+                                        <span th:text="${item.isStatus() ? 'Active' : 'Block'}"></span>
+                                    </a>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Product 2</td>
-                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
-                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                <td>28/10/2022</td>
-                                <td>100 $</td>
-                                <td>Ready</td>
-                                <td>Category 2</td>
-                                <td>
-                                    <button type="button" class="btn btn-warning">Edit</button>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Product 3</td>
-                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
-                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                <td>28/10/2022</td>
-                                <td>100 $</td>
-                                <td>Ready</td>
-                                <td>Category 3</td>
-                                <td>
-                                    <button type="button" class="btn btn-warning">Edit</button>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Product 4</td>
-                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
-                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                <td>28/10/2022</td>
-                                <td>100 $</td>
-                                <td>Ready</td>
-                                <td>Category 4</td>
-                                <td>
-                                    <button type="button" class="btn btn-warning">Edit</button>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>Product 5</td>
-                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
-                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                <td>28/10/2022</td>
-                                <td>100 $</td>
-                                <td>Ready</td>
-                                <td>Category 5</td>
-                                <td>
-                                    <button type="button" class="btn btn-warning">Edit</button>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>Product 6</td>
-                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
-                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                <td>28/10/2022</td>
-                                <td>100 $</td>
-                                <td>Ready</td>
-                                <td>Category 6</td>
-                                <td>
-                                    <button type="button" class="btn btn-warning">Edit</button>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>Product 7</td>
-                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
-                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                <td>28/10/2022</td>
-                                <td>100 $</td>
-                                <td>Ready</td>
-                                <td>Category 7</td>
-                                <td>
-                                    <button type="button" class="btn btn-warning">Edit</button>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>Product 8</td>
-                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
-                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                <td>28/10/2022</td>
-                                <td>100 $</td>
-                                <td>Ready</td>
-                                <td>Category 8</td>
-                                <td>
-                                    <button type="button" class="btn btn-warning">Edit</button>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>9</td>
-                                <td>Product 9</td>
-                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
-                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                <td>28/10/2022</td>
-                                <td>100 $</td>
-                                <td>Ready</td>
-                                <td>Category 9</td>
-                                <td>
-                                    <button type="button" class="btn btn-warning">Edit</button>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>10</td>
-                                <td>Product 10</td>
-                                <td><img th:src="@{/assets/img/avatars/avatar-5.jpg}" width="30%" alt="#"></td>
-                                <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                <td>28/10/2022</td>
-                                <td>100 $</td>
-                                <td>Ready</td>
-                                <td>Category 10</td>
-                                <td>
-                                    <button type="button" class="btn btn-warning">Edit</button>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger">Delete</button>
+                                    <a type="button" class="btn btn-warning"
+                                       th:href="@{/admin/product/edit-product/{productId}(productId=${item.productId})}">Edit</a>
                                 </td>
                             </tr>
                             </tbody>
-
                         </table>
                     </div>
                     <!-- /.card-body -->

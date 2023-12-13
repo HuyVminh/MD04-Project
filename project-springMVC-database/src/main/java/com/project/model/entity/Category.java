@@ -1,7 +1,11 @@
 package com.project.model.entity;
 
+import javax.validation.constraints.NotEmpty;
+
 public class Category {
+
     private int categoryId;
+    @NotEmpty(message = "Không được để trống !")
     private String categoryName;
     private boolean status;
     private String description;

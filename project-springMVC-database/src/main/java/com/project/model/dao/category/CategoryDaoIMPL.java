@@ -130,4 +130,15 @@ public class CategoryDaoIMPL implements ICategoryDAO {
             ConnectionDatabase.closeConnection(connection);
         }
     }
+
+    @Override
+    public boolean checkCategoryName(String categoryName) {
+        List<Category> categoryList = findAll();
+        for (Category category : categoryList) {
+            if (category.getCategoryName().equals(categoryName)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

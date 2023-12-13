@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IUserService {
     List<User> findAll();
-    User findById(Integer id);
+    List<User> searchUser(String email);
     User findByEmail(String email);
     boolean register(UserRegisterDTO user);
     User login(String email,String password);

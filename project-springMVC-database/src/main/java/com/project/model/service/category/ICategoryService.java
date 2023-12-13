@@ -10,4 +10,6 @@ public interface ICategoryService {
     List<Category> findByName(String name);
     boolean saveOrUpdate(Category category);
     void block(Integer id);
+    boolean checkCategoryName(String categoryName);
+    boolean checkProductByCategoryId(int id);
 }

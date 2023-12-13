@@ -31,11 +31,12 @@ public class ProductDaoIMPL implements IProductDAO {
                 product.setProductId(resultSet.getInt("id"));
                 product.setProductName(resultSet.getString("name"));
                 product.setDescription(resultSet.getString("description"));
-                product.setStatus(resultSet.getBoolean("status"));
                 product.setPrice(resultSet.getFloat("price"));
+                product.setStock(resultSet.getInt("stock"));
+                product.setImageUrl(resultSet.getString("image"));
                 Category category = categoryDAO.findById(resultSet.getInt("category_id"));
                 product.setCategory(category);
-                product.setStock(resultSet.getInt("stock"));
+                product.setStatus(resultSet.getBoolean("status"));
                 products.add(product);
             }
         } catch (SQLException e) {
@@ -59,10 +60,12 @@ public class ProductDaoIMPL implements IProductDAO {
                 product.setProductId(resultSet.getInt("id"));
                 product.setProductName(resultSet.getString("name"));
                 product.setDescription(resultSet.getString("description"));
+                product.setPrice(resultSet.getFloat("price"));
+                product.setStock(resultSet.getInt("stock"));
+                product.setImageUrl(resultSet.getString("image"));
                 Category category = categoryDAO.findById(resultSet.getInt("category_id"));
                 product.setCategory(category);
-                product.setStock(resultSet.getInt("stock"));
-                product.setPrice(resultSet.getFloat("price"));
+                product.setStatus(resultSet.getBoolean("status"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -87,11 +90,12 @@ public class ProductDaoIMPL implements IProductDAO {
                 product.setProductId(resultSet.getInt("id"));
                 product.setProductName(resultSet.getString("name"));
                 product.setDescription(resultSet.getString("description"));
-                product.setStatus(resultSet.getBoolean("status"));
+                product.setPrice(resultSet.getFloat("price"));
+                product.setStock(resultSet.getInt("stock"));
+                product.setImageUrl(resultSet.getString("image"));
                 Category category = categoryDAO.findById(resultSet.getInt("category_id"));
                 product.setCategory(category);
-                product.setStock(resultSet.getInt("stock"));
-                product.setPrice(resultSet.getFloat("price"));
+                product.setStatus(resultSet.getBoolean("status"));
                 foundList.add(product);
             }
         } catch (SQLException e) {
@@ -109,21 +113,23 @@ public class ProductDaoIMPL implements IProductDAO {
         int check = 0;
         try {
             if (product.getProductId() == 0) {
-                CallableStatement callableStatement = connection.prepareCall("{CALL PROC_ADD_PRODUCT(?,?,?,?,?)}");
+                CallableStatement callableStatement = connection.prepareCall("{CALL PROC_ADD_PRODUCT(?,?,?,?,?,?)}");
                 callableStatement.setString(1, product.getProductName());
                 callableStatement.setString(2, product.getDescription());
                 callableStatement.setFloat(3, product.getPrice());
                 callableStatement.setInt(4, product.getStock());
-                callableStatement.setInt(5, product.getCategory().getCategoryId());
+                callableStatement.setString(5, product.getImageUrl());
+                callableStatement.setInt(6, product.getCategory().getCategoryId());
                 check = callableStatement.executeUpdate();
             } else {
-                CallableStatement callableStatement = connection.prepareCall("{CALL PROC_UPDATE_PRODUCT(?,?,?,?,?,?)}");
+                CallableStatement callableStatement = connection.prepareCall("{CALL PROC_UPDATE_PRODUCT(?,?,?,?,?,?,?)}");
                 callableStatement.setInt(1, product.getProductId());
                 callableStatement.setString(2, product.getProductName());
                 callableStatement.setString(3, product.getDescription());
                 callableStatement.setFloat(4, product.getPrice());
                 callableStatement.setInt(5, product.getStock());
-                callableStatement.setInt(6, product.getCategory().getCategoryId());
+                callableStatement.setString(6, product.getImageUrl());
+                callableStatement.setInt(7, product.getCategory().getCategoryId());
                 check = callableStatement.executeUpdate();
             }
             if (check > 0) {

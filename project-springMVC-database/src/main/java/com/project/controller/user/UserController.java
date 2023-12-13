@@ -1,7 +1,9 @@
 package com.project.controller.user;
 
 import com.project.model.dto.user.UserRegisterDTO;
+import com.project.model.entity.Product;
 import com.project.model.entity.User;
+import com.project.model.service.product.IProductService;
 import com.project.model.service.user.IUserService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
@@ -11,19 +13,13 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
+import java.util.List;
 
 @Controller
 @PropertySource("classpath:config.properties")
@@ -34,6 +30,8 @@ public class UserController {
     private IUserService userService;
     @Autowired
     private HttpSession session;
+    @Autowired
+    private IProductService productService;
 
     @RequestMapping("/about")
     public String getAbout() {
@@ -56,7 +54,9 @@ public class UserController {
     }
 
     @RequestMapping("/list-product")
-    public String getListProduct() {
+    public String getListProduct(Model model) {
+        List<Product> productList = productService.findAll();
+        model.addAttribute("productList", productList);
         return "user/list-product";
     }
 
@@ -105,8 +105,13 @@ public class UserController {
                 return "redirect:/admin";
             }
             if (BCrypt.checkpw(user.getPassword(), user_check.getPassword()) && user_check.isRole()) {
-                session.setAttribute("userLogin", user_check);
-                return "redirect:/";
+                if(user_check.isStatus()){
+                    session.setAttribute("userLogin", user_check);
+                    return "redirect:/";
+                }else {
+                    redirectAttributes.addFlashAttribute("err", "Tài khoản của bạn đã bị khóa !");
+                    return "redirect:/login-register";
+                }
             }
             redirectAttributes.addFlashAttribute("err", "Email hoặc mật khẩu không đúng !");
             return "redirect:/login-register";
@@ -119,5 +124,11 @@ public class UserController {
     public String logout() {
         session.removeAttribute("userLogin");
         return "redirect:/";
+    }
+    @GetMapping("/detail/{id}")
+    public String productDetail(@PathVariable("id") int id,Model model) {
+        Product product = productService.findById(id);
+        model.addAttribute("product",product);
+        return "user/product-detail";
     }
 }

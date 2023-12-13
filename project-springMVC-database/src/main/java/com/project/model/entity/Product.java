@@ -1,21 +1,27 @@
 package com.project.model.entity;
 
-import java.util.List;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 public class Product {
     private int productId;
+    @NotEmpty(message = "Không được để trống !")
     private String productName;
     private String description;
+@Min(value = 1,message = "Giá không thể nhỏ hơn 1 !")
     private float price;
     private Category category;
     private boolean status;
+    @Min(value = 0,message = "Số lượng không thể nhỏ hơn 0 !")
     private int stock;
-    private List<String> imageUrls;
+    @NotEmpty(message = "Hãy thêm ảnh cho sản phẩm !")
+    private String imageUrl;
 
     public Product() {
     }
 
-    public Product(int productId, String productName, String description, float price, Category category, boolean status, int stock, List<String> imageUrls) {
+    public Product(int productId, String productName, String description, float price, Category category, boolean status, int stock, String imageUrl) {
         this.productId = productId;
         this.productName = productName;
         this.description = description;
@@ -23,7 +29,7 @@ public class Product {
         this.category = category;
         this.status = status;
         this.stock = stock;
-        this.imageUrls = imageUrls;
+        this.imageUrl = imageUrl;
     }
 
     public int getProductId() {
@@ -82,11 +88,11 @@ public class Product {
         this.stock = stock;
     }
 
-    public List<String> getImageUrls() {
-        return imageUrls;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

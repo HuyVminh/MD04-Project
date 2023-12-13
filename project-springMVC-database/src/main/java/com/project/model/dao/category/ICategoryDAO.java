@@ -10,5 +10,5 @@ public interface ICategoryDAO {
     List<Category> findByName(String name);
     boolean saveOrUpdate(Category category);
     void block(Integer id);
-
+    boolean checkCategoryName(String categoryName);
 }

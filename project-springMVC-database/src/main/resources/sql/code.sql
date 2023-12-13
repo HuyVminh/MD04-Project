@@ -54,6 +54,7 @@ create table product
     description text,
     price       float        not null,
     stock       int          not null,
+    image varchar(255),
     category_id int          not null,
     foreign key (category_id) references category (id),
     status      boolean default true
@@ -167,3 +168,17 @@ begin
     insert into user(username, email, password, phone) values (u_name, u_email, u_pass, u_phone);
 end
 //
+delimiter //
+create procedure PROC_SEARCH_USER(in search varchar(255))
+begin
+    select * from user where lcase(email) like concat('%', search, '%');
+end
+//
+
+delimiter //
+create procedure PROC_BLOCK_USER(in u_id int)
+begin
+    UPDATE user
+    SET status = IF(status = true, false, true)
+    WHERE id = u_id;
+end//

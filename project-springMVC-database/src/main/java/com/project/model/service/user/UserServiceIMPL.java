@@ -21,8 +21,8 @@ public class UserServiceIMPL implements IUserService {
     }
 
     @Override
-    public User findById(Integer id) {
-        return null;
+    public List<User> searchUser(String email) {
+        return userDAO.searchUser(email);
     }
 
     @Override
@@ -49,6 +49,6 @@ public class UserServiceIMPL implements IUserService {
 
     @Override
     public void block(Integer id) {
-
+        userDAO.block(id);
     }
 }

@@ -1,5 +1,6 @@
 package com.project.model.dao.user;
 
+import com.project.model.entity.Category;
 import com.project.model.entity.User;
 import com.project.util.ConnectionDatabase;
 import org.springframework.stereotype.Repository;
@@ -44,8 +45,35 @@ public class UserDaoIMPL implements IUserDAO {
     }
 
     @Override
-    public User findById(Integer id) {
-        return null;
+    public List<User> searchUser(String email) {
+        Connection connection = null;
+        List<User> foundList = new ArrayList<>();
+        try {
+            connection = ConnectionDatabase.openConnection();
+            CallableStatement callableStatement = connection.prepareCall("{CALL PROC_SEARCH_USER(?)}");
+            String emailSearch = email.toLowerCase().trim();
+            callableStatement.setString(1, emailSearch);
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setUserId(resultSet.getInt("id"));
+                user.setUserName(resultSet.getString("username"));
+                user.setFullName(resultSet.getString("fullname"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPassword(resultSet.getString("password"));
+                user.setAvatar(resultSet.getString("avatar"));
+                user.setAddress(resultSet.getString("address"));
+                user.setPhone(resultSet.getString("phone"));
+                user.setRole(resultSet.getBoolean("role"));
+                user.setStatus(resultSet.getBoolean("status"));
+                foundList.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+        return foundList;
     }
 
     @Override
@@ -106,6 +134,17 @@ public class UserDaoIMPL implements IUserDAO {
 
     @Override
     public void block(Integer id) {
-
+        Connection connection = null;
+        connection = ConnectionDatabase.openConnection();
+        CallableStatement callableStatement = null;
+        try {
+            callableStatement = connection.prepareCall("{CALL PROC_BLOCK_USER(?)}");
+            callableStatement.setInt(1, id);
+            callableStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
     }
 }
