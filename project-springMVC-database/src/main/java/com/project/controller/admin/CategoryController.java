@@ -62,6 +62,10 @@ public class CategoryController {
         if (result.hasErrors()){
             return "admin/category/edit-category";
         }
+        if(categoryService.checkCategoryName(category.getCategoryName())){
+            redirectAttributes.addFlashAttribute("err", "Tên danh mục đã tồn tại, không thể cập nhật danh mục !");
+            return "redirect:/admin/category";
+        }
         categoryService.saveOrUpdate(category);
         redirectAttributes.addFlashAttribute("mess", "Cập nhật thành công !");
         return "redirect:/admin/category";

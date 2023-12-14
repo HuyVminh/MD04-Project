@@ -45,13 +45,7 @@ public class ProductController {
     public String openAddProduct(Model model) {
         Product product = new Product();
         model.addAttribute("product", product);
-        List<Category> categoryList = categoryService.findAll();
-        List<Category> categoryListTrue = new ArrayList<>();
-        for (Category category : categoryList) {
-            if (category.isStatus()) {
-                categoryListTrue.add(category);
-            }
-        }
+        List<Category> categoryListTrue = getCategories();
         model.addAttribute("categoryList", categoryListTrue);
         return "admin/product/add-product";
     }
@@ -59,13 +53,7 @@ public class ProductController {
     @PostMapping("/product/add-product")
     public String createProduct(@Valid @ModelAttribute("product") Product product, BindingResult result, @RequestParam("imageProduct") MultipartFile file, RedirectAttributes redirectAttributes, Model model) {
         if (result.hasErrors()) {
-            List<Category> categoryList = categoryService.findAll();
-            List<Category> categoryListTrue = new ArrayList<>();
-            for (Category category : categoryList) {
-                if (category.isStatus()) {
-                    categoryListTrue.add(category);
-                }
-            }
+            List<Category> categoryListTrue = getCategories();
             model.addAttribute("categoryList", categoryListTrue);
             return "admin/product/add-product";
         }
@@ -74,7 +62,10 @@ public class ProductController {
         try {
             file.transferTo(destination);
             product.setImageUrl("http://localhost:8080/uploads/images/" + fileName);
-
+            if (productService.checkProductName(product.getProductName())){
+                redirectAttributes.addFlashAttribute("err", "Tên sản phẩm đã tồn tại !");
+                return "redirect:/admin/product/add-product";
+            }
             if (productService.saveOrUpdate(product)) {
                 redirectAttributes.addFlashAttribute("mess", "Thêm mới sản phẩm thành công !");
                 return "redirect:/admin/product";
@@ -86,16 +77,10 @@ public class ProductController {
     }
 
     @GetMapping("/product/edit-product/{id}")
-    public String editCategory(@PathVariable("id") Integer id, Model model) {
+    public String editProduct(@PathVariable("id") Integer id, Model model) {
         Product product = productService.findById(id);
         model.addAttribute("product", product);
-        List<Category> categoryList = categoryService.findAll();
-        List<Category> categoryListTrue = new ArrayList<>();
-        for (Category category : categoryList) {
-            if (category.isStatus()) {
-                categoryListTrue.add(category);
-            }
-        }
+        List<Category> categoryListTrue = getCategories();
         model.addAttribute("categoryList", categoryListTrue);
         return "admin/product/edit-product";
     }
@@ -103,13 +88,7 @@ public class ProductController {
     @PostMapping("/product/edit-product")
     public String update(@Valid @ModelAttribute("product") Product product, BindingResult result, @RequestParam("imageProduct") MultipartFile file, RedirectAttributes redirectAttributes, Model model) {
         if (result.hasErrors()) {
-            List<Category> categoryList = categoryService.findAll();
-            List<Category> categoryListTrue = new ArrayList<>();
-            for (Category category : categoryList) {
-                if (category.isStatus()) {
-                    categoryListTrue.add(category);
-                }
-            }
+            List<Category> categoryListTrue = getCategories();
             model.addAttribute("categoryList", categoryListTrue);
             return "admin/product/edit-product";
         }
@@ -120,6 +99,10 @@ public class ProductController {
                 file.transferTo(destination);
                 product.setImageUrl("http://localhost:8080/uploads/images/" + fileName);
             }
+            if (productService.checkProductName(product.getProductName())){
+                redirectAttributes.addFlashAttribute("err", "Tên sản phẩm đã tồn tại, không thể cập nhật sản phẩm !");
+                return "redirect:/admin/product";
+            }
             productService.saveOrUpdate(product);
             redirectAttributes.addFlashAttribute("mess", "Cập nhật thành công !");
             return "redirect:/admin/product";
@@ -127,10 +110,21 @@ public class ProductController {
             throw new RuntimeException(e);
         }
     }
+
     @GetMapping("/product/{id}")
     public String blockProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         productService.block(id);
         redirectAttributes.addFlashAttribute("mess", "Cập nhật thành công !");
         return "redirect:/admin/product";
+    }
+    private List<Category> getCategories() {
+        List<Category> categoryList = categoryService.findAll();
+        List<Category> categoryListTrue = new ArrayList<>();
+        for (Category category : categoryList) {
+            if (category.isStatus()) {
+                categoryListTrue.add(category);
+            }
+        }
+        return categoryListTrue;
     }
 }

@@ -51,4 +51,9 @@ public class UserServiceIMPL implements IUserService {
     public void block(Integer id) {
         userDAO.block(id);
     }
+
+    @Override
+    public boolean update(User user) {
+        return userDAO.update(user);
+    }
 }

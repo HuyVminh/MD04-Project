@@ -8,6 +8,7 @@ public class User {
     private String password;
     private String avatar;
     private String address;
+
     private String phone;
     private boolean role = true;
     private boolean status = true;

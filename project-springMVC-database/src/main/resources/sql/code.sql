@@ -54,7 +54,7 @@ create table product
     description text,
     price       float        not null,
     stock       int          not null,
-    image varchar(255),
+    image       varchar(255),
     category_id int          not null,
     foreign key (category_id) references category (id),
     status      boolean default true
@@ -122,6 +122,13 @@ begin
 end
 
 //
+
+delimiter //
+create procedure PROC_LASTEST_PRODUCT()
+    begin
+        select * from product order by id desc limit 4;
+    end
+//
 -- --------------------------------------------------------
 
 -- ------------------------USER----------------------------
@@ -182,3 +189,46 @@ begin
     SET status = IF(status = true, false, true)
     WHERE id = u_id;
 end//
+
+delimiter //
+create procedure PROC_UPDATE_USER(in u_id int,
+                                  in u_username varchar(255),
+                                  in u_fullname varchar(255),
+                                  in u_avatar varchar(255),
+                                  in u_address varchar(255),
+                                  in u_phone varchar(255))
+begin
+    UPDATE user
+    SET username = u_username, fullname = u_fullname,avatar = u_avatar, address = u_address, phone = u_phone, address = u_address
+    WHERE id = u_id;
+end//
+-- --------------------------------------------------------
+
+-- -----------------WISHLIST-------------------------------
+create table wishlist
+(
+    id         int primary key auto_increment,
+    user_id    int,
+    foreign key (user_id) references user (id),
+    product_id int,
+    foreign key (product_id) references product (id)
+);
+
+delimiter //
+create procedure PROC_SHOW_WISHLIST_BY_USER_ID(in u_id int)
+begin
+    select w.product_id, p.name, p.price,p.image,p.category_id from wishlist w, product p where w.user_id = u_id and w.product_id = p.id;
+end
+//
+
+delimiter //
+create procedure PROC_ADD_TO_WISHLIST(in u_id int, p_id int)
+begin
+    insert into wishlist(user_id, product_id) values (u_id, p_id);
+end;
+
+create procedure PROC_REMOVE_FROM_WISHLIST(in u_id int, p_id int)
+begin
+    delete from wishlist where user_id = u_id and product_id = p_id;
+end
+//

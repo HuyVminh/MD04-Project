@@ -11,4 +11,6 @@ public interface IProductService {
     List<Product> findByName(String name);
     boolean saveOrUpdate(Product product);
     void block(Integer id);
+    boolean checkProductName(String productName);
+    List<Product> getLastestProduct();
 }

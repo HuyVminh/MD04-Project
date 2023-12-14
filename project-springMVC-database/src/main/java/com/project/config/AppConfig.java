@@ -88,5 +88,7 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/admin/**");
+        registry.addInterceptor(new UserInterceptor()).addPathPatterns("/my-account");
+        registry.addInterceptor(new UserInterceptor()).addPathPatterns("/wishlist");
     }
 }

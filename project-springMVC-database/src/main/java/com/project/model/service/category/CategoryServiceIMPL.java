@@ -8,6 +8,7 @@ import com.project.model.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,4 +58,17 @@ public class CategoryServiceIMPL implements ICategoryService {
         }
         return true;
     }
+
+    @Override
+    public List<Category> getCategoryList() {
+        List<Category> categoryList = findAll();
+        List<Category> categories = new ArrayList<>();
+        for (Category category : categoryList) {
+            if (category.isStatus()){
+                categories.add(category);
+            }
+        }
+        return categoryList;
+    }
+
 }

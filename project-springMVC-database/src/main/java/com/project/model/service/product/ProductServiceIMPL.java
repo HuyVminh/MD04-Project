@@ -36,4 +36,14 @@ public class ProductServiceIMPL implements IProductService {
     public void block(Integer id) {
         productDAO.block(id);
     }
+
+    @Override
+    public boolean checkProductName(String productName) {
+        return productDAO.checkProductName(productName);
+    }
+
+    @Override
+    public List<Product> getLastestProduct() {
+        return productDAO.getLastestProduct();
+    }
 }

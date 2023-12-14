@@ -12,4 +12,5 @@ public interface IUserDAO {
     boolean register(User user);
     User login(String email,String password);
     void block(Integer id);
+    boolean update(User user);
 }

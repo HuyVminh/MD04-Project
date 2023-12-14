@@ -22,9 +22,14 @@
                     <!--=======  breadcrumb content  =======-->
                     <div class="breadcrumb-content">
                         <h2 class="breadcrumb-content__title">Shop</h2>
-                        <ul class="breadcrumb-content__page-map">
-                            <li><a href="index.html">Home</a></li>
+                        <ul class="breadcrumb-content__page-map" th:if="${category==null}">
+                            <li><a href="/">Home</a></li>
                             <li class="active">Shop</li>
+                        </ul>
+                        <ul class="breadcrumb-content__page-map" th:unless="${category==null}">
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/list-product">Shop</a></li>
+                            <li class="active"><span th:text="${category.categoryName}"></span></li>
                         </ul>
                     </div>
                     <!--=======  End of breadcrumb content  =======-->
@@ -133,7 +138,7 @@
                                                     <h3 class="single-grid-product__title"><span
                                                             th:text="${item.productName}"></span></h3>
                                                     <p class="single-grid-product__price">
-                                                        <span class="main-price" th:text="${item.price}" }></span>
+                                                        <span class="main-price" th:text="${#numbers.formatDecimal(item.getPrice(), 0, 'COMMA', 0, 'POINT') + ' VND'}" }></span>
                                                 </div>
                                             </div>
                                             <!--=======  End of product grid view  =======-->

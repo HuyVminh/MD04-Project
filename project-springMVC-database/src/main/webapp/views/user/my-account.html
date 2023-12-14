@@ -23,7 +23,7 @@
                     <div class="breadcrumb-content">
                         <h2 class="breadcrumb-content__title">My Account</h2>
                         <ul class="breadcrumb-content__page-map">
-                            <li><a href="index.html">Home</a></li>
+                            <li><a href="/">Home</a></li>
                             <li class="active">My Account</li>
                         </ul>
                     </div>
@@ -67,7 +67,8 @@
                                     <a href="#account-info" data-bs-toggle="tab"><i class="fa fa-user"></i> Account
                                         Details</a>
 
-                                    <a href="login-register.html"><i class="fa fa-sign-out"></i> Logout</a>
+                                    <a href="/logout" onclick="return confirm('Bạn có muốn đăng xuất ?')"><i
+                                            class="fa fa-sign-out"></i> Logout</a>
                                 </div>
                             </div>
                             <!-- My Account Tab Menu End -->
@@ -81,9 +82,10 @@
                                             <h3>Dashboard</h3>
 
                                             <div class="welcome mb-20">
-                                                <p>Hello, <strong>Alex Tuntuni</strong> (If Not <strong>Tuntuni
-                                                    !</strong><a href="login-register.html" class="logout">
-                                                    Logout</a>)</p>
+                                                <p>Hello, <strong th:text="${session.userLogin.userName}"></strong> (If
+                                                    Not <strong th:text="${session.userLogin.userName}"></strong><a
+                                                            href="/logout" class="logout">
+                                                        Logout</a>)</p>
                                             </div>
 
                                             <p class="mb-0">From your account dashboard. you can easily check &amp;
@@ -91,6 +93,16 @@
                                                 recent orders, manage your shipping and billing addresses and edit
                                                 your
                                                 password and account details.</p>
+                                        </div>
+                                        <div th:if="${mess!=null}"
+                                             class="alert alert-primary alert-dismissible fade show"
+                                             role="alert" id="alertMessage">
+                                            <strong th:text="${mess}"></strong>
+                                        </div>
+                                        <div th:if="${err!=null}"
+                                             class="alert alert-danger alert-dismissible fade show"
+                                             role="alert" id="alertMessageErr">
+                                            <strong th:text="${err}"></strong>
                                         </div>
                                     </div>
                                     <!-- Single Tab Content End -->
@@ -215,51 +227,56 @@
                                             <h3>Account Details</h3>
 
                                             <div class="account-details-form">
-                                                <form action="#">
+
+                                                <form action="/updateUserLogin" method="post" th:object="${userLogin}" enctype="multipart/form-data">
+                                                    <input type="hidden" class="form-control" th:field="*{userId}">
+                                                    <input type="hidden" th:field="*{email}">
                                                     <div class="row">
-                                                        <div class="col-lg-6 col-12">
-                                                            <input id="first-name" placeholder="First Name"
-                                                                   type="text">
-                                                        </div>
-
-                                                        <div class="col-lg-6 col-12">
-                                                            <input id="last-name" placeholder="Last Name"
-                                                                   type="text">
-                                                        </div>
-
-                                                        <div class="col-12">
-                                                            <input id="display-name" placeholder="Display Name"
-                                                                   type="text">
+                                                        <input type="hidden" th:field="*{avatar}">
+                                                        <div class="col-12 d-flex justify-content-between align-items-center gap-3 mb-3">
+                                                            <img th:src="${userLogin.avatar}" width="150px" class="mb-3" id="previewImage">
+                                                            <input type="file" name="avatarImage" value="Avatar" id="imageInput">
                                                         </div>
 
                                                         <div class="col-12">
                                                             <input id="email" placeholder="Email Address"
-                                                                   type="email">
+                                                                   type="email" th:field="*{email}" disabled readonly>
+                                                        </div>
+
+                                                        <div class="col-lg-6 col-12">
+                                                            <input id="first-name" placeholder="User Name"
+                                                                   type="text" th:field="*{userName}">
+                                                            <small class="form-text text-danger" th:errors="*{userName}"></small>
+                                                        </div>
+
+                                                        <div class="col-lg-6 col-12">
+                                                            <input id="last-name" placeholder="Full Name"
+                                                                   type="text" th:field="*{fullName}">
+                                                        </div>
+
+                                                        <div class="col-lg-6 col-12 mb-2">
+                                                            <input id="display-name" placeholder="Display Name"
+                                                                   type="text" th:field="*{phone}">
+                                                        </div>
+
+                                                        <div class="col-lg-6 col-12 mb-2">
+                                                            <input placeholder="Address"
+                                                                   type="text" th:field="*{address}">
                                                         </div>
 
                                                         <div class="col-12 mb-2">
-                                                            <h4>Password change</h4>
+                                                            <h4>Confirm Password</h4>
                                                         </div>
 
-                                                        <div class="col-12">
+                                                        <div class="col-12 mb-2">
                                                             <input id="current-pwd" placeholder="Current Password"
-                                                                   type="password">
-                                                        </div>
-
-                                                        <div class="col-lg-6 col-12">
-                                                            <input id="new-pwd" placeholder="New Password"
-                                                                   type="password">
-                                                        </div>
-
-                                                        <div class="col-lg-6 col-12">
-                                                            <input id="confirm-pwd" placeholder="Confirm Password"
-                                                                   type="password">
+                                                                   type="password" th:field="*{password}">
                                                         </div>
 
                                                         <div class="col-12">
-                                                            <button class="save-change-btn">Save Changes</button>
+                                                            <button type="submit" class="save-change-btn">Save Changes
+                                                            </button>
                                                         </div>
-
                                                     </div>
                                                 </form>
                                             </div>
@@ -439,9 +456,11 @@
                         </li>
                         <li class="menu-item-has-children"><a href="#">LANGUAGE: EN-GB </a>
                             <ul class="sub-menu">
-                                <li><a href="javascript:void(0)"><img width="16" height="11" src="assets/img/icons/en-gb.webp" alt="">
+                                <li><a href="javascript:void(0)"><img width="16" height="11"
+                                                                      src="assets/img/icons/en-gb.webp" alt="">
                                     English</a></li>
-                                <li><a href="javascript:void(0)"><img width="16" height="11" src="assets/img/icons/de-de.webp" alt="">
+                                <li><a href="javascript:void(0)"><img width="16" height="11"
+                                                                      src="assets/img/icons/de-de.webp" alt="">
                                     Germany</a></li>
                             </ul>
                         </li>
@@ -508,6 +527,34 @@
 
 <!-- Active JS -->
 <script th:src="@{/assets/js/active.js}"></script>
+
+<script>
+    // Lắng nghe sự kiện khi người dùng chọn file
+    document.getElementById('imageInput').addEventListener('change', function(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+
+        // Đọc nội dung của file
+        reader.onload = function(e) {
+            var imageUrl = e.target.result;
+
+            // Gán URL của ảnh vào thuộc tính src của thẻ <img>
+            document.getElementById('previewImage').src = imageUrl;
+        };
+
+        // Đọc file dưới dạng URL
+        reader.readAsDataURL(file);
+    });
+</script>
+<script>
+    // Tự động ẩn thông báo sau 15 giây
+    setTimeout(function () {
+        document.getElementById("alertMessage").style.display = "none";
+    }, 3000);
+    setTimeout(function () {
+        document.getElementById("alertMessageErr").style.display = "none";
+    }, 3000);
+</script>
 
 <!--=====  End of JS files ======-->
 

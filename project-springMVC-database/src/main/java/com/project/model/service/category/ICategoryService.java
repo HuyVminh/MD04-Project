@@ -2,6 +2,7 @@ package com.project.model.service.category;
 
 import com.project.model.entity.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ICategoryService {
@@ -12,4 +13,5 @@ public interface ICategoryService {
     void block(Integer id);
     boolean checkCategoryName(String categoryName);
     boolean checkProductByCategoryId(int id);
+    List<Category> getCategoryList();
 }

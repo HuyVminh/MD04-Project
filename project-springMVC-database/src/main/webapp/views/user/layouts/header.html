@@ -14,72 +14,28 @@
                     <div class="navigation-menu-wrapper">
                         <nav>
                             <ul>
-                                <li class="menu-item-has-children"><a href="/">HOME</a>
+                                <li><a href="/">HOME</a></li>
+
+                                <li class="menu-item-has-children"><a href="/list-product">SHOP</a>
                                     <ul class="sub-menu">
-                                        <li><a href="index.html">Home Shop 1</a></li>
-                                        <li><a href="index-2.html">Home Shop 2</a></li>
-                                        <li><a href="index-3.html">Home Shop 3</a></li>
-                                        <li><a href="index-4.html">Home Shop 4</a></li>
-                                        <li><a href="index-5.html">Home Shop 5</a></li>
-                                        <li><a href="index-6.html">Home Shop 6</a></li>
-                                        <li><a href="index-7.html">Home Shop 7</a></li>
-                                        <li><a href="index-8.html">Home Shop 8</a></li>
+                                        <li>
+                                            <ul th:each="category:${session.categoryList}">
+                                                <li><a th:href="@{/category/{id}(id=${category.getCategoryId()})}"><span th:text="${category.getCategoryName()}"></span></a></li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </li>
 
                                 <li class="menu-item-has-children"><a href="#">PAGES</a>
                                     <ul class="sub-menu">
-                                        <li class="menu-item-has-children"><a href="#">Page List One</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="cart.html">Cart</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
-                                                <li><a href="wishlist.html">Wishlist</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item-has-children"><a href="#">page list two</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="my-account.html">My Account</a></li>
-                                                <li><a href="login-register.html">Login Register</a></li>
-                                                <li><a href="faq.html">FAQ</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item-has-children"><a href="#">Page list three</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="compare.html">Compare</a></li>
-                                                <li><a href="contact.html">Contact</a></li>
-                                                <li><a href="about.html">About Us</a></li>
-                                            </ul>
-                                        </li>
+                                        <li class="menu-item-has-children"><a href="/faq">FAQ</a></li>
+                                        <li class="menu-item-has-children"><a href="/blogs">BLOGS</a></li>
                                     </ul>
                                 </li>
 
-                                <li class="menu-item-has-children"><a href="/list-product">SHOP</a>
-                                    <ul class="mega-menu four-column">
-                                        <li><a href="#">Category List</a>
-                                            <ul>
-                                                <li><a href="shop-3-column.html">shop 3 column</a></li>
-                                                <li><a href="shop-4-column.html">shop 4 column</a></li>
-                                                <li><a href="shop-left-sidebar.html">shop left sidebar</a></li>
-                                                <li><a href="shop-right-sidebar.html">shop right sidebar</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
+                                <li><a href="/about">ABOUT</a></li>
 
-                                <li class="menu-item-has-children"><a href="blog-left-sidebar.html">BLOG</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
-                                        <li><a href="blog-right-sidebar.html">Blog Right Sidebar</a></li>
-                                        <li><a href="blog-post-left-sidebar.html">Blog Post Left Sidebar</a></li>
-                                        <li><a href="blog-post-right-sidebar.html">Blog Post Right Sidebar</a></li>
-                                        <li><a href="blog-post-image-format.html">Blog Post Image Format</a></li>
-                                        <li><a href="blog-post-image-gallery.html">Blog Post Image Gallery</a></li>
-                                        <li><a href="blog-post-audio-format.html">Blog Post Audio Format</a></li>
-                                        <li><a href="blog-post-video-format.html">Blog Post Video Format</a></li>
-                                    </ul>
-                                </li>
-
-                                <li><a href="contact">CONTACT</a></li>
+                                <li><a href="/contact">CONTACT</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -195,16 +151,16 @@
                                         <div class="single-settings-block" th:if="${session.userLogin == null}">
                                             <h4 class="title">MY ACCOUNT</h4>
                                             <ul>
-                                                <li><a href="login-register">Login - Register</a></li>
+                                                <li><a href="/login-register">Login - Register</a></li>
                                             </ul>
                                         </div>
                                         <div class="single-settings-block" th:unless="${session.userLogin == null}">
                                             <h4 class="title"><span th:text="${'Xin chào, ' + session.userLogin.userName }" class="text-warning"></span></h4>
                                             <ul>
-                                                <li><a href="my-account">Information</a></li>
-                                                <li><a href="wishlist">Wish List</a></li>
-                                                <li><a href="cart">Cart</a></li>
-                                                <li><a href="logout">Logout</a></li>
+                                                <li><a href="/my-account">Information</a></li>
+                                                <li><a href="/wishlist">Wish List</a></li>
+                                                <li><a href="/cart">Cart</a></li>
+                                                <li><a href="/logout">Logout</a></li>
                                             </ul>
                                         </div>
                                     </div>

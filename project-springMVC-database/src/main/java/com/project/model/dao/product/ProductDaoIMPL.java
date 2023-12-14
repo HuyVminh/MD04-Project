@@ -158,4 +158,44 @@ public class ProductDaoIMPL implements IProductDAO {
             ConnectionDatabase.closeConnection(connection);
         }
     }
+
+    @Override
+    public boolean checkProductName(String productName) {
+        List<Product> productList = findAll();
+        for (Product product : productList) {
+            if(product.getProductName().equals(productName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public List<Product> getLastestProduct() {
+        Connection connection = null;
+        List<Product> products = new ArrayList<>();
+        try {
+            connection = ConnectionDatabase.openConnection();
+            CallableStatement callableStatement = connection.prepareCall("{CALL PROC_LASTEST_PRODUCT}");
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setProductId(resultSet.getInt("id"));
+                product.setProductName(resultSet.getString("name"));
+                product.setDescription(resultSet.getString("description"));
+                product.setPrice(resultSet.getFloat("price"));
+                product.setStock(resultSet.getInt("stock"));
+                product.setImageUrl(resultSet.getString("image"));
+                Category category = categoryDAO.findById(resultSet.getInt("category_id"));
+                product.setCategory(category);
+                product.setStatus(resultSet.getBoolean("status"));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+        return products;
+    }
 }

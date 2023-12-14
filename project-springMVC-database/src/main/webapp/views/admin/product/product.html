@@ -71,6 +71,11 @@
                              role="alert" id="alertMessage">
                             <strong th:text="${mess}"></strong>
                         </div>
+                        <div th:if="${err!=null}"
+                             class="alert alert-primary alert-dismissible fade show"
+                             role="alert" id="alertMessageErr">
+                            <strong th:text="${err}"></strong>
+                        </div>
                         <table id="example1" class="table table-bordered table-striped text-center overflow-auto">
                             <thead>
                             <tr>

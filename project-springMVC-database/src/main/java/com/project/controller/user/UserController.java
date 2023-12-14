@@ -1,10 +1,14 @@
 package com.project.controller.user;
 
 import com.project.model.dto.user.UserRegisterDTO;
+import com.project.model.entity.Category;
 import com.project.model.entity.Product;
 import com.project.model.entity.User;
+import com.project.model.entity.Wishlist;
+import com.project.model.service.category.ICategoryService;
 import com.project.model.service.product.IProductService;
 import com.project.model.service.user.IUserService;
+import com.project.model.service.wishlist.IWishlishService;
 import org.mindrot.jbcrypt.BCrypt;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +19,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,6 +40,10 @@ public class UserController {
     private HttpSession session;
     @Autowired
     private IProductService productService;
+    @Autowired
+    private ICategoryService categoryService;
+    @Autowired
+    private IWishlishService wishlishService;
 
     @RequestMapping("/about")
     public String getAbout() {
@@ -43,30 +55,60 @@ public class UserController {
         return "user/contact";
     }
 
+    @RequestMapping("/faq")
+    public String getFaq() {
+        return "user/faq";
+    }
+
+    @RequestMapping("/blogs")
+    public String getBlog() {
+        return "user/blog";
+    }
+
     @RequestMapping("/cart")
     public String getCart() {
         return "user/cart";
     }
 
     @RequestMapping("/checkout")
-    public String getCheckout() {
+    public String getCheckout(Model model) {
         return "user/checkout";
     }
 
-    @RequestMapping("/list-product")
+    @GetMapping("/list-product")
     public String getListProduct(Model model) {
         List<Product> productList = productService.findAll();
         model.addAttribute("productList", productList);
+        List<Category> categories = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categories);
         return "user/list-product";
     }
 
-    @RequestMapping("/my-account")
-    public String getMyAccount() {
-        return "user/my-account";
+    @GetMapping("/category/{id}")
+    public String getListProductById(@PathVariable("id") Integer id, Model model) {
+        List<Product> productList = productService.findAll();
+        List<Product> products = new ArrayList<>();
+        for (Product product : productList) {
+            if (product.getCategory().getCategoryId() == id) {
+                products.add(product);
+            }
+        }
+        model.addAttribute("productList", products);
+        Category category = categoryService.findById(id);
+        model.addAttribute("category", category);
+        List<Category> categories = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categories);
+        return "user/list-product";
     }
 
+
     @RequestMapping("/wishlist")
-    public String getWishlist() {
+    public String getWishlist(Model model) {
+        User userLogin = (User) session.getAttribute("userLogin");
+        if(userLogin!=null){
+            List<Wishlist> list = wishlishService.findAllByUserId(userLogin.getUserId());
+            model.addAttribute("wishlist", list);
+        }
         return "user/wishlist";
     }
 
@@ -74,6 +116,8 @@ public class UserController {
     public String getLoginRegister(Model model) {
         UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
         model.addAttribute("user", userRegisterDTO);
+        List<Category> categories = categoryService.getCategoryList();
+        model.addAttribute("categoryList", categories);
         return "user/login-register";
     }
 
@@ -105,10 +149,10 @@ public class UserController {
                 return "redirect:/admin";
             }
             if (BCrypt.checkpw(user.getPassword(), user_check.getPassword()) && user_check.isRole()) {
-                if(user_check.isStatus()){
+                if (user_check.isStatus()) {
                     session.setAttribute("userLogin", user_check);
                     return "redirect:/";
-                }else {
+                } else {
                     redirectAttributes.addFlashAttribute("err", "Tài khoản của bạn đã bị khóa !");
                     return "redirect:/login-register";
                 }
@@ -125,10 +169,53 @@ public class UserController {
         session.removeAttribute("userLogin");
         return "redirect:/";
     }
+
     @GetMapping("/detail/{id}")
-    public String productDetail(@PathVariable("id") int id,Model model) {
+    public String productDetail(@PathVariable("id") int id, Model model) {
         Product product = productService.findById(id);
-        model.addAttribute("product",product);
+        model.addAttribute("product", product);
         return "user/product-detail";
+    }
+
+    @RequestMapping("/my-account")
+    public String getMyAccount(Model model) {
+        User userLogin = (User) session.getAttribute("userLogin");
+        model.addAttribute("userLogin", userLogin);
+        return "user/my-account";
+    }
+
+    @PostMapping("/updateUserLogin")
+    public String updateInformation(@RequestParam("avatarImage") MultipartFile file, @ModelAttribute("userLogin") User userLogin, BindingResult result, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            return "user/my-account";
+        }
+        String fileName = file.getOriginalFilename();
+        File destination = new File(path + fileName);
+
+        try {
+            if (!fileName.isEmpty()) {
+                file.transferTo(destination);
+                userLogin.setAvatar("http://localhost:8080/uploads/avatars/" + fileName);
+            }
+            User user = (User) session.getAttribute("userLogin");
+            System.out.println(user.getPassword());
+            if (BCrypt.checkpw(userLogin.getPassword(),user.getPassword())){
+                if (userService.update(userLogin)) {
+                    session.setAttribute("userLogin", userLogin);
+                    redirectAttributes.addFlashAttribute("mess", "Cập nhật thông tin thành công !");
+                    return "redirect:/my-account";
+                }
+            }else {
+                redirectAttributes.addFlashAttribute("err", "Mật khẩu không khớp !");
+                return "redirect:/my-account";
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return "user/my-account";
+    }
+    @GetMapping("/addToWishlist")
+    public String addToWishlist(){
+        return "user/wishlist";
     }
 }

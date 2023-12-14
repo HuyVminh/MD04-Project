@@ -13,4 +13,5 @@ public interface IUserService {
     boolean register(UserRegisterDTO user);
     User login(String email,String password);
     void block(Integer id);
+    boolean update(User user);
 }

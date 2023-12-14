@@ -147,4 +147,28 @@ public class UserDaoIMPL implements IUserDAO {
             ConnectionDatabase.closeConnection(connection);
         }
     }
+
+    @Override
+    public boolean update(User user) {
+        Connection connection = null;
+        connection = ConnectionDatabase.openConnection();
+        try {
+            CallableStatement callableStatement = connection.prepareCall("{CALL PROC_UPDATE_USER(?,?,?,?,?,?)}");
+            callableStatement.setInt(1, user.getUserId());
+            callableStatement.setString(2, user.getUserName());
+            callableStatement.setString(3, user.getFullName());
+            callableStatement.setString(4, user.getAvatar());
+            callableStatement.setString(5, user.getAddress());
+            callableStatement.setString(6, user.getPhone());
+            int check = callableStatement.executeUpdate();
+            if (check > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+        return false;
+    }
 }

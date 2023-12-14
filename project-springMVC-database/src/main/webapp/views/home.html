@@ -45,72 +45,28 @@
                     <div class="navigation-menu-wrapper">
                         <nav>
                             <ul>
-                                <li class="menu-item-has-children"><a href="index.html">HOME</a>
+                                <li><a href="index.html">HOME</a></li>
+
+                                <li class="menu-item-has-children"><a href="/list-product">SHOP</a>
                                     <ul class="sub-menu">
-                                        <li><a href="index.html">Home Shop 1</a></li>
-                                        <li><a href="index-2.html">Home Shop 2</a></li>
-                                        <li><a href="index-3.html">Home Shop 3</a></li>
-                                        <li><a href="index-4.html">Home Shop 4</a></li>
-                                        <li><a href="index-5.html">Home Shop 5</a></li>
-                                        <li><a href="index-6.html">Home Shop 6</a></li>
-                                        <li><a href="index-7.html">Home Shop 7</a></li>
-                                        <li><a href="index-8.html">Home Shop 8</a></li>
+                                        <li>
+                                            <ul th:each="category:${categoryList}">
+                                                <li><a th:href="@{/category/{id}(id=${category.getCategoryId()})}"><span th:text="${category.getCategoryName()}"></span></a></li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </li>
 
                                 <li class="menu-item-has-children"><a href="#">PAGES</a>
                                     <ul class="sub-menu">
-                                        <li class="menu-item-has-children"><a href="#">Page List One</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="cart.html">Cart</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
-                                                <li><a href="wishlist.html">Wishlist</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item-has-children"><a href="#">page list two</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="my-account.html">My Account</a></li>
-                                                <li><a href="login-register.html">Login Register</a></li>
-                                                <li><a href="faq.html">FAQ</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item-has-children"><a href="#">Page list three</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="compare.html">Compare</a></li>
-                                                <li><a href="contact.html">Contact</a></li>
-                                                <li><a href="about.html">About Us</a></li>
-                                            </ul>
-                                        </li>
+                                        <li class="menu-item-has-children"><a href="/faq">FAQ</a></li>
+                                        <li class="menu-item-has-children"><a href="/blogs">BLOGS</a></li>
                                     </ul>
                                 </li>
 
-                                <li class="menu-item-has-children"><a href="/list-product">SHOP</a>
-                                    <ul class="mega-menu four-column">
-                                        <li><a href="#">Category List</a>
-                                            <ul>
-                                                <li><a href="shop-3-column.html">shop 3 column</a></li>
-                                                <li><a href="shop-4-column.html">shop 4 column</a></li>
-                                                <li><a href="shop-left-sidebar.html">shop left sidebar</a></li>
-                                                <li><a href="shop-right-sidebar.html">shop right sidebar</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
+                                <li><a href="/about">ABOUT</a></li>
 
-                                <li class="menu-item-has-children"><a href="blog-left-sidebar.html">BLOG</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
-                                        <li><a href="blog-right-sidebar.html">Blog Right Sidebar</a></li>
-                                        <li><a href="blog-post-left-sidebar.html">Blog Post Left Sidebar</a></li>
-                                        <li><a href="blog-post-right-sidebar.html">Blog Post Right Sidebar</a></li>
-                                        <li><a href="blog-post-image-format.html">Blog Post Image Format</a></li>
-                                        <li><a href="blog-post-image-gallery.html">Blog Post Image Gallery</a></li>
-                                        <li><a href="blog-post-audio-format.html">Blog Post Audio Format</a></li>
-                                        <li><a href="blog-post-video-format.html">Blog Post Video Format</a></li>
-                                    </ul>
-                                </li>
-
-                                <li><a href="contact">CONTACT</a></li>
+                                <li><a href="/contact">CONTACT</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -225,16 +181,16 @@
                                         <div class="single-settings-block" th:if="${session.userLogin == null}">
                                             <h4 class="title">MY ACCOUNT</h4>
                                             <ul>
-                                                <li><a href="login-register">Login - Register</a></li>
+                                                <li><a href="/login-register">Login - Register</a></li>
                                             </ul>
                                         </div>
                                         <div class="single-settings-block" th:unless="${session.userLogin == null}">
                                             <h4 class="title"><span th:text="${'Xin chào, ' + session.userLogin.userName }" class="text-warning"></span></h4>
                                             <ul>
-                                                <li><a href="my-account">Information</a></li>
-                                                <li><a href="wishlist">Wish List</a></li>
-                                                <li><a href="cart">Cart</a></li>
-                                                <li><a href="logout">Logout</a></li>
+                                                <li><a href="/my-account">Information</a></li>
+                                                <li><a href="/wishlist">Wish List</a></li>
+                                                <li><a href="/cart">Cart</a></li>
+                                                <li><a href="/logout">Logout</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -1783,108 +1739,15 @@
                         {"breakpoint":479, "settings": {"slidesToShow": 1, "arrows": false} }
                     ]'>
 
-                        <div class="col">
-                            <!--=======  single grid product  =======-->
-                            <div class="single-grid-product">
-                                <div class="single-grid-product__image">
-                                    <div class="single-grid-product__label">
-                                        <span class="sale">-20%</span>
-                                        <span class="new">New</span>
-                                    </div>
-                                    <a href="single-product.html">
-                                        <img width="600" height="800" src="assets/img/products/1-600x800.webp"
-                                             class="img-fluid" alt="">
-                                        <img width="600" height="800" src="assets/img/products/1_1-600x800.webp"
-                                             class="img-fluid" alt="">
-                                    </a>
-
-                                    <div class="hover-icons">
-                                        <a href="javascript:void(0)"><i class="ion-bag"></i></a>
-                                        <a href="javascript:void(0)"><i class="ion-heart"></i></a>
-                                        <a href="javascript:void(0)"><i class="ion-android-options"></i></a>
-                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                           data-bs-target="#quick-view-modal-container"><i
-                                                class="ion-android-open"></i></a>
-                                    </div>
-                                </div>
-                                <div class="single-grid-product__content">
-                                    <div class="single-grid-product__category-rating">
-                                        <span class="category"><a href="shop-left-sidebar.html">Decor</a></span>
-                                        <span class="rating">
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star-outline"></i>
-                                            </span>
-                                    </div>
-
-                                    <h3 class="single-grid-product__title"><a href="single-product.html">Cillum
-                                        dolore lorem ipsum decoration item</a></h3>
-                                    <p class="single-grid-product__price"><span
-                                            class="discounted-price">$100.00</span> <span
-                                            class="main-price discounted">$120.00</span></p>
-                                </div>
-                            </div>
-                            <!--=======  End of single grid product  =======-->
-                        </div>
-
-                        <div class="col">
-                            <!--=======  single grid product  =======-->
-                            <div class="single-grid-product">
-                                <div class="single-grid-product__image">
-                                    <div class="single-grid-product__label">
-                                        <span class="sale">-20%</span>
-                                    </div>
-                                    <a href="single-product.html">
-                                        <img width="600" height="800" src="assets/img/products/2-600x800.webp"
-                                             class="img-fluid" alt="">
-                                        <img width="600" height="800" src="assets/img/products/2_1-600x800.webp"
-                                             class="img-fluid" alt="">
-                                    </a>
-
-                                    <div class="hover-icons">
-                                        <a href="javascript:void(0)"><i class="ion-bag"></i></a>
-                                        <a href="javascript:void(0)"><i class="ion-heart"></i></a>
-                                        <a href="javascript:void(0)"><i class="ion-android-options"></i></a>
-                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                           data-bs-target="#quick-view-modal-container"><i
-                                                class="ion-android-open"></i></a>
-                                    </div>
-                                </div>
-                                <div class="single-grid-product__content">
-                                    <div class="single-grid-product__category-rating">
-                                        <span class="category"><a href="shop-left-sidebar.html">Decor</a></span>
-                                        <span class="rating">
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star-outline"></i>
-                                            </span>
-                                    </div>
-
-                                    <h3 class="single-grid-product__title"><a href="single-product.html">lorem
-                                        ipsum cillium dolore decoration item</a></h3>
-                                    <p class="single-grid-product__price"><span
-                                            class="discounted-price">$20.00</span> <span
-                                            class="main-price discounted">$40.00</span></p>
-                                </div>
-                            </div>
-                            <!--=======  End of single grid product  =======-->
-                        </div>
-
-                        <div class="col">
+                        <div class="col" th:each="product : ${productList}">
                             <!--=======  single grid product  =======-->
                             <div class="single-grid-product">
                                 <div class="single-grid-product__image">
                                     <div class="single-grid-product__label">
                                         <span class="new">New</span>
                                     </div>
-                                    <a href="single-product.html">
-                                        <img width="600" height="800" src="assets/img/products/3-600x800.webp"
-                                             class="img-fluid" alt="">
-                                        <img width="600" height="800" src="assets/img/products/3_1-600x800.webp"
+                                    <a th:href="@{/detail/{id}(id=${product.productId})}">
+                                        <img width="600" height="800" th:src="${product.imageUrl}"
                                              class="img-fluid" alt="">
                                     </a>
 
@@ -1899,7 +1762,9 @@
                                 </div>
                                 <div class="single-grid-product__content">
                                     <div class="single-grid-product__category-rating">
-                                        <span class="category"><a href="shop-left-sidebar.html">Vase</a></span>
+                                        <span class="category"
+                                              th:text="${product.category.categoryName}"><a
+                                                th:href="@{/user/category/{id}(id = ${product.category.categoryId})}"></a></span>
                                         <span class="rating">
                                                 <i class="ion-android-star active"></i>
                                                 <i class="ion-android-star active"></i>
@@ -1909,99 +1774,10 @@
                                             </span>
                                     </div>
 
-                                    <h3 class="single-grid-product__title"><a href="single-product.html">cillium
-                                        dolore lorem ipsum decoration item</a></h3>
-                                    <p class="single-grid-product__price"><span
-                                            class="discounted-price">$40.00</span> <span
-                                            class="main-price discounted">$60.00</span></p>
-                                </div>
-                            </div>
-                            <!--=======  End of single grid product  =======-->
-                        </div>
-
-                        <div class="col">
-                            <!--=======  single grid product  =======-->
-                            <div class="single-grid-product">
-                                <div class="single-grid-product__image">
-
-                                    <a href="single-product.html">
-                                        <img width="600" height="800" src="assets/img/products/4-600x800.webp"
-                                             class="img-fluid" alt="">
-                                        <img width="600" height="800" src="assets/img/products/4_1-600x800.webp"
-                                             class="img-fluid" alt="">
-                                    </a>
-
-                                    <div class="hover-icons">
-                                        <a href="javascript:void(0)"><i class="ion-bag"></i></a>
-                                        <a href="javascript:void(0)"><i class="ion-heart"></i></a>
-                                        <a href="javascript:void(0)"><i class="ion-android-options"></i></a>
-                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                           data-bs-target="#quick-view-modal-container"><i
-                                                class="ion-android-open"></i></a>
-                                    </div>
-                                </div>
-                                <div class="single-grid-product__content">
-                                    <div class="single-grid-product__category-rating">
-                                        <span class="category"><a href="shop-left-sidebar.html">Furniture</a></span>
-                                        <span class="rating">
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star-outline"></i>
-                                            </span>
-                                    </div>
-
-                                    <h3 class="single-grid-product__title"><a href="single-product.html">Cillum
-                                        dolore lorem ipsum decoration item</a></h3>
-                                    <p class="single-grid-product__price"><span class="main-price">$120.00</span>
+                                    <h3 class="single-grid-product__title"><a th:text="${product.productName}"></a></h3>
+                                    <p class="single-grid-product__price">
+                                        <span class="main-price" th:text="${#numbers.formatDecimal(product.getPrice(), 0, 'COMMA', 0, 'POINT') + ' VND'}" }></span>
                                     </p>
-                                </div>
-                            </div>
-                            <!--=======  End of single grid product  =======-->
-                        </div>
-
-                        <div class="col">
-                            <!--=======  single grid product  =======-->
-                            <div class="single-grid-product">
-                                <div class="single-grid-product__image">
-                                    <div class="single-grid-product__label">
-                                        <span class="sale">-20%</span>
-                                        <span class="new">New</span>
-                                    </div>
-                                    <a href="single-product.html">
-                                        <img width="600" height="800" src="assets/img/products/5-600x800.webp"
-                                             class="img-fluid" alt="">
-                                        <img width="600" height="800" src="assets/img/products/5_1-600x800.webp"
-                                             class="img-fluid" alt="">
-                                    </a>
-
-                                    <div class="hover-icons">
-                                        <a href="javascript:void(0)"><i class="ion-bag"></i></a>
-                                        <a href="javascript:void(0)"><i class="ion-heart"></i></a>
-                                        <a href="javascript:void(0)"><i class="ion-android-options"></i></a>
-                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                           data-bs-target="#quick-view-modal-container"><i
-                                                class="ion-android-open"></i></a>
-                                    </div>
-                                </div>
-                                <div class="single-grid-product__content">
-                                    <div class="single-grid-product__category-rating">
-                                        <span class="category"><a href="shop-left-sidebar.html">Decor</a></span>
-                                        <span class="rating">
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star-outline"></i>
-                                            </span>
-                                    </div>
-
-                                    <h3 class="single-grid-product__title"><a href="single-product.html">Cillum
-                                        dolore lorem ipsum decoration item</a></h3>
-                                    <p class="single-grid-product__price"><span
-                                            class="discounted-price">$80.00</span> <span
-                                            class="main-price discounted">$100.00</span></p>
                                 </div>
                             </div>
                             <!--=======  End of single grid product  =======-->
