@@ -99,4 +99,65 @@ public class OrderDaoIMPL implements IOrderDAO {
         }
         return order;
     }
+
+    @Override
+    public void acceptOrder(int orderId) {
+        Connection connection = null;
+        try {
+            connection = ConnectionDatabase.openConnection();
+            CallableStatement callableStatement = connection.prepareCall("{CALL PROC_ACCEPT_STATUS_ORDER(?)}");
+            callableStatement.setInt(1, orderId);
+            callableStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public void cancleOrder(int orderId) {
+        Connection connection = null;
+        try {
+            connection = ConnectionDatabase.openConnection();
+            CallableStatement callableStatement = connection.prepareCall("{CALL PROC_DENIDE_STATUS_ORDER(?)}");
+            callableStatement.setInt(1, orderId);
+            callableStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public List<Order> findOrderByUserId(int userId) {
+        Connection connection = null;
+        List<Order> orderList = new ArrayList<>();
+        try {
+            connection = ConnectionDatabase.openConnection();
+            CallableStatement callableStatement = connection.prepareCall("{CALL PROC_SHOW_ORDER_BY_USER_ID(?)}");
+            callableStatement.setInt(1, userId);
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()) {
+                Order order = new Order();
+                order.setOrderId(resultSet.getInt("id"));
+                User user = userDAO.findById(resultSet.getInt("user_id"));
+                order.setUser(user);
+                order.setOrderCustomerName(resultSet.getString("order_name"));
+                order.setAddress(resultSet.getString("address"));
+                order.setPhoneNumber(resultSet.getString("phone"));
+                order.setNote(resultSet.getString("note"));
+                order.setCreated_date(resultSet.getDate("created_date"));
+                order.setStatus(resultSet.getInt("status"));
+                order.setTotal(resultSet.getFloat("total"));
+                orderList.add(order);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+        return orderList;
+    }
 }

@@ -8,4 +8,7 @@ public interface IOrderDAO {
     List<Order> findAll();
     Integer saveOrder(Order order);
     Order findOrderById(Integer id);
+    void acceptOrder(int orderId);
+    void cancleOrder(int orderId);
+    List<Order> findOrderByUserId(int userId);
 }

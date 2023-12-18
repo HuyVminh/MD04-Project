@@ -383,3 +383,19 @@ begin
     select * from order_details where id = o_id;
 end
 //
+delimiter //
+create procedure PROC_ACCEPT_STATUS_ORDER(in o_id int)
+begin
+    update orders set status = 1 where id = o_id;
+end;
+create procedure PROC_DENIDE_STATUS_ORDER(in o_id int)
+begin
+    update orders set status = 2 where id = o_id;
+end;
+//
+delimiter //
+create procedure PROC_SHOW_ORDER_BY_USER_ID(in u_id int)
+begin
+    select * from orders where user_id = u_id;
+end
+//

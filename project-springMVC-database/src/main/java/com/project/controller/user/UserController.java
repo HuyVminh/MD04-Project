@@ -4,6 +4,7 @@ import com.project.model.dto.user.UserRegisterDTO;
 import com.project.model.entity.*;
 import com.project.model.service.cart.ICartService;
 import com.project.model.service.category.ICategoryService;
+import com.project.model.service.order.IOrderService;
 import com.project.model.service.product.IProductService;
 import com.project.model.service.user.IUserService;
 import com.project.model.service.wishlist.IWishlishService;
@@ -44,6 +45,8 @@ public class UserController {
     private IWishlishService wishlishService;
     @Autowired
     private ICartService cartService;
+    @Autowired
+    private IOrderService orderService;
 
     @GetMapping("/list-product")
     public String getListProduct(Model model) {
@@ -88,11 +91,11 @@ public class UserController {
         User userLogin = (User) session.getAttribute("userLogin");
         if (userLogin == null) {
             return "redirect:/login-register";
-        }else {
-            if(!wishlishService.checkProductInWishlist(userLogin.getUserId(),id)){
+        } else {
+            if (!wishlishService.checkProductInWishlist(userLogin.getUserId(), id)) {
                 wishlishService.addToWishlist(userLogin.getUserId(), id);
-            }else {
-                wishlishService.removeFromWishlist(userLogin.getUserId(),id);
+            } else {
+                wishlishService.removeFromWishlist(userLogin.getUserId(), id);
             }
             return "redirect:/wishlist";
 
@@ -144,9 +147,9 @@ public class UserController {
                     session.setAttribute("cartList", cartList);
                     float total = 0;
                     for (Cart cart : cartList) {
-                        total += cart.getQuantity()*cart.getProduct().getPrice();
+                        total += cart.getQuantity() * cart.getProduct().getPrice();
                     }
-                    session.setAttribute("total",total);
+                    session.setAttribute("total", total);
                     return "redirect:/";
                 } else {
                     redirectAttributes.addFlashAttribute("err", "Tài khoản của bạn đã bị khóa !");
@@ -177,6 +180,8 @@ public class UserController {
     public String getMyAccount(Model model) {
         User userLogin = (User) session.getAttribute("userLogin");
         model.addAttribute("userLogin", userLogin);
+        List<Order> orderList = orderService.findOrderByUserId(userLogin.getUserId());
+        model.addAttribute("orderList", orderList);
         return "user/my-account";
     }
 

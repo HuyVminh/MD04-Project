@@ -33,4 +33,14 @@ public class OrdersController {
         model.addAttribute("order", order);
         return "/admin/orders/ordersDetails";
     }
+    @GetMapping("/orders/accept/{id}")
+    public String handleAcceptOrder(@PathVariable("id") int id){
+        orderService.acceptOrder(id);
+        return "redirect:/admin/orders";
+    }
+    @GetMapping("orders/cancel/{id}")
+    public String handleCancelOrder(@PathVariable("id") int id){
+        orderService.cancleOrder(id);
+        return "redirect:/admin/orders";
+    }
 }

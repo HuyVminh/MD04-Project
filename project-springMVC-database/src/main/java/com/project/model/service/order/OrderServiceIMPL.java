@@ -6,6 +6,7 @@ import com.project.model.dao.product.IProductDAO;
 import com.project.model.entity.Cart;
 import com.project.model.entity.Order;
 import com.project.model.entity.OrderDetail;
+import com.project.model.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,8 @@ public class OrderServiceIMPL implements IOrderService {
     private HttpSession session;
     @Autowired
     private IOrderDetailDAO orderDetailDAO;
-
+    @Autowired
+    private IProductDAO productDAO;
     @Override
     public boolean orderCheckout(Order order) {
         try {
@@ -55,5 +57,25 @@ public class OrderServiceIMPL implements IOrderService {
     @Override
     public List<OrderDetail> findDetailByOrderId(Integer id) {
         return orderDetailDAO.findDetailByOrderId(id);
+    }
+
+    @Override
+    public void acceptOrder(int orderId) {
+        orderDAO.acceptOrder(orderId);
+    }
+
+    @Override
+    public void cancleOrder(int orderId) {
+        orderDAO.cancleOrder(orderId);
+        List<OrderDetail> orderDetailList = findDetailByOrderId(orderId);
+        for (OrderDetail orderDetail : orderDetailList) {
+            Product product = productDAO.findById(orderDetail.getProduct().getProductId());
+            product.setStock(product.getStock()+orderDetail.getQuantity());
+        }
+    }
+
+    @Override
+    public List<Order> findOrderByUserId(int userId) {
+        return orderDAO.findOrderByUserId(userId);
     }
 }

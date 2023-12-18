@@ -10,4 +10,7 @@ public interface IOrderService {
     List<Order> findAll();
     Order findOrderById(Integer id);
     List<OrderDetail> findDetailByOrderId(Integer id);
+    void acceptOrder(int orderId);
+    void cancleOrder(int orderId);
+    List<Order> findOrderByUserId(int userId);
 }

@@ -57,12 +57,9 @@
                         <h3 class="card-title">Orders Management Table</h3>
                         <nav class="navbar navbar-expand-lg bg-light">
                             <div class="container-fluid">
-                                <a class="navbar-brand" href="/admin/category/add-category">
-                                    <button type="button" class="btn btn-success">+ Add new Category</button>
-                                </a>
                                 <form class="d-flex" role="search" th:action="@{/admin/category/search}" method="post">
                                     <input class="form-control me-2 fst-italic" type="search" name="nameSearch"
-                                           placeholder="Enter category's name..." aria-label="Search">
+                                           placeholder="Enter order's customer name..." aria-label="Search">
                                     <button class="btn btn-outline-success" type="submit">Search</button>
                                 </form>
                             </div>
@@ -94,7 +91,7 @@
                                 <th>Action</th>
                             </tr>
                             </thead>
-                            <tbody id="categories">
+                            <tbody id="orders">
                             <tr th:each="item:${orderList}">
                                 <td th:text="${item.orderId}"></td>
                                 <td class="w-auto" th:text="${item.orderCustomerName}"></td>
@@ -102,9 +99,14 @@
                                 <td th:text="${item.address}"></td>
                                 <td th:text="${item.note}"></td>
                                 <td th:text="${item.created_date}"></td>
-                                <td class="w-auto" th:text="${#numbers.formatDecimal(item.total, 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
+                                <td class="w-auto"
+                                    th:text="${#numbers.formatDecimal(item.total, 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
                                 <td>
-                                    <p class="btn btn-secondary" th:text="${item.status==0 ?'Pending': (item.status==1 ?'Accepted':'Denided')}"></p>
+                                    <button class="btn" disabled
+                                       th:classappend="${item.status == 0 ? 'btn-secondary' : (item.status == 1 ? 'btn-success' : 'btn-danger')}"
+                                       >
+                                        <span th:text="${item.status == 0 ?'Pending': (item.status == 1 ?'Accepted':'Denided')}"></span>
+                                    </button>
                                 </td>
                                 <td>
                                     <a class="btn btn-outline-primary"

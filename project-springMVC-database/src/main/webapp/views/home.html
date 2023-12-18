@@ -295,8 +295,7 @@
                                                 </h3>
                                                 <p class="single-grid-product__price">
                                                     <span class="main-price"
-                                                          th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT') + ' VND'}"
-                                                          }></span>
+                                                          th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
                                                 </p>
                                             </div>
                                         </div>
@@ -1068,8 +1067,8 @@
     <!--=======  search form  =======-->
 
     <div class="search-form">
-        <form action="#">
-            <input type="search" placeholder="Search entire store here ...">
+        <form action="/search-products" method="post">
+            <input type="search" placeholder="Search entire store here ..." name="searchProduct">
             <button type="submit"><i class="ion-android-search"></i></button>
         </form>
     </div>

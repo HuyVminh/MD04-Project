@@ -10,7 +10,9 @@ import com.project.model.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -60,5 +62,11 @@ public class HomeController {
     @RequestMapping("/blogs")
     public String getBlog() {
         return "user/blog";
+    }
+    @PostMapping("/search-products")
+    public String handleSearchProducts(@RequestParam("searchProduct") String searchProduct,Model model){
+        List<Product> productList = productService.findByName(searchProduct);
+        model.addAttribute("productList",productList);
+        return "/user/list-product";
     }
 }
