@@ -12,4 +12,5 @@ public interface IProductDAO {
     void block(Integer id);
     boolean checkProductName(String productName);
     List<Product> getLastestProduct();
+    void updateStock(int productId, int quantity);
 }

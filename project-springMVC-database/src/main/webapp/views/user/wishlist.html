@@ -50,73 +50,26 @@
                                 <table class="table">
                                     <thead>
                                     <tr>
+                                        <th class="pro-stock">ID</th>
                                         <th class="pro-thumbnail">Image</th>
                                         <th class="pro-title">Product</th>
                                         <th class="pro-price">Price</th>
-                                        <th class="pro-quantity">Quantity</th>
-                                        <th class="pro-subtotal">Total</th>
+                                        <th class="pro-desc">Description</th>
                                         <th class="pro-remove">Remove</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="single-product.html"><img
-                                                width="600" height="800" src="assets/img/products/big1-1.webp" class="img-fluid"
+                                    <tr th:each="item : ${wishlist}">
+                                        <td class="pro-id"><span th:text="${item.product.productId}"></span></td>
+                                        <td class="pro-thumbnail"><a th:href="@{/detail/{id}(id = ${item.product.productId})}"><img
+                                                width="600" height="800" th:src="${item.product.imageUrl}" class="img-fluid"
                                                 alt="Product"></a></td>
-                                        <td class="pro-title"><a href="single-product.html">Cillum dolore tortor
-                                            nisl fermentum</a></td>
-                                        <td class="pro-price"><span>$29.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="quantity-selection"><input type="number" value="1"
-                                                                                   min="1"></div>
+                                        <td class="pro-title">
+                                            <a th:href="@{/detail/{id}(id = ${item.product.productId})}"><span th:text="${item.product.productName}"></span></a>
                                         </td>
-                                        <td class="pro-subtotal"><span>$29.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="single-product.html"><img
-                                                width="600" height="800" src="assets/img/products/big1-2.webp" class="img-fluid"
-                                                alt="Product"></a></td>
-                                        <td class="pro-title"><a href="single-product.html">Auctor gravida
-                                            pellentesque</a></td>
-                                        <td class="pro-price"><span>$30.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="quantity-selection"><input type="number" value="1"
-                                                                                   min="1"></div>
-                                        </td>
-                                        <td class="pro-subtotal"><span>$60.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="single-product.html"><img
-                                                width="600" height="800" src="assets/img/products/big1-3.webp" class="img-fluid"
-                                                alt="Product"></a></td>
-                                        <td class="pro-title"><a href="single-product.html">Condimentum posuere
-                                            consectetur</a></td>
-                                        <td class="pro-price"><span>$25.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="quantity-selection"><input type="number" value="1"
-                                                                                   min="1"></div>
-                                        </td>
-                                        <td class="pro-subtotal"><span>$25.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="single-product.html"><img
-                                                width="600" height="800" src="assets/img/products/big1-4.webp" class="img-fluid"
-                                                alt="Product"></a></td>
-                                        <td class="pro-title"><a href="single-product.html">Habitasse dictumst
-                                            elementum</a></td>
-                                        <td class="pro-price"><span>$11.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="quantity-selection"><input type="number" value="1"
-                                                                                   min="1"></div>
-                                        </td>
-                                        <td class="pro-subtotal"><span>$11.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a>
+                                        <td class="pro-price w-25"><span th:text="${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span></td>
+                                        <td class="pro-desc"><span th:text="${item.product.description}"></span></td>
+                                        <td class="pro-remove"><a th:href="@{/wishlist/{id}(id = ${item.product.productId})}"><i class="fa fa-trash-o"></i></a>
                                         </td>
                                     </tr>
                                     </tbody>

@@ -171,4 +171,33 @@ public class UserDaoIMPL implements IUserDAO {
         }
         return false;
     }
+
+    @Override
+    public User findById(int id) {
+        Connection connection = null;
+        connection = ConnectionDatabase.openConnection();
+        User user = new User();
+        try {
+            CallableStatement callableStatement = connection.prepareCall("{CALL PROC_FIND_USER_BY_ID(?)}");
+            callableStatement.setInt(1, id);
+            ResultSet resultSet = callableStatement.executeQuery();
+            if (resultSet.next()) {
+                user.setUserId(resultSet.getInt("id"));
+                user.setUserName(resultSet.getString("username"));
+                user.setFullName(resultSet.getString("fullname"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPassword(resultSet.getString("password"));
+                user.setAvatar(resultSet.getString("avatar"));
+                user.setAddress(resultSet.getString("address"));
+                user.setPhone(resultSet.getString("phone"));
+                user.setRole(resultSet.getBoolean("role"));
+                user.setStatus(resultSet.getBoolean("status"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+        return user;
+    }
 }

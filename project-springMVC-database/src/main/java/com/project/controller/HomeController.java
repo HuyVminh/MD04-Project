@@ -1,8 +1,10 @@
 package com.project.controller;
 
+import com.project.model.entity.Cart;
 import com.project.model.entity.Category;
 import com.project.model.entity.Product;
 import com.project.model.entity.User;
+import com.project.model.service.cart.ICartService;
 import com.project.model.service.category.ICategoryService;
 import com.project.model.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class HomeController {
@@ -24,16 +23,42 @@ public class HomeController {
     private ICategoryService categoryService;
     @Autowired
     private IProductService productService;
+    @Autowired
+    private ICartService cartService;
 
     @RequestMapping("/")
     public String index(Model model) {
         User userLogin = (User) session.getAttribute("userLogin");
-        model.addAttribute("userLogin", userLogin);
+        if (userLogin != null){
+            model.addAttribute("userLogin", userLogin);
+            List<Cart> cartList = cartService.findCartByUserId(userLogin.getUserId());
+            session.setAttribute("cartList", cartList);
+        }
         List<Category> categories = categoryService.getCategoryList();
         session.setAttribute("categoryList", categories);
-        model.addAttribute("categoryList", categories);
-        List<Product> products = productService.getLastestProduct();
-        model.addAttribute("productList", products);
+        List<Product> products = productService.findAll();
+        model.addAttribute("products", products);
+        List<Product> productList = productService.getLastestProduct();
+        model.addAttribute("productList", productList);
         return "home";
+    }
+    @RequestMapping("/about")
+    public String getAbout() {
+        return "user/about";
+    }
+
+    @RequestMapping("/contact")
+    public String getContact() {
+        return "user/contact";
+    }
+
+    @RequestMapping("/faq")
+    public String getFaq() {
+        return "user/faq";
+    }
+
+    @RequestMapping("/blogs")
+    public String getBlog() {
+        return "user/blog";
     }
 }

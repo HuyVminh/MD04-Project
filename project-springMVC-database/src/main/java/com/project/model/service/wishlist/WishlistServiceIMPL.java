@@ -24,4 +24,15 @@ public class WishlistServiceIMPL implements IWishlishService{
     public boolean removeFromWishlist(int userId, int productId) {
         return wishlistDAO.removeFromWishlist(userId, productId);
     }
+
+    @Override
+    public boolean checkProductInWishlist(int userId,int productId) {
+        List<Wishlist> wishlist = wishlistDAO.findAllByUserId(userId);
+        for (Wishlist wishItem : wishlist) {
+            if(wishItem.getProduct().getProductId() == productId){
+                return true;
+            }
+        }
+        return false;
+    }
 }

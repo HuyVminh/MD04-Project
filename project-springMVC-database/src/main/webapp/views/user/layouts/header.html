@@ -20,7 +20,8 @@
                                     <ul class="sub-menu">
                                         <li>
                                             <ul th:each="category:${session.categoryList}">
-                                                <li><a th:href="@{/category/{id}(id=${category.getCategoryId()})}"><span th:text="${category.getCategoryName()}"></span></a></li>
+                                                <li><a th:href="@{/category/{id}(id=${category.getCategoryId()})}"><span
+                                                        th:text="${category.getCategoryName()}"></span></a></li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -28,8 +29,8 @@
 
                                 <li class="menu-item-has-children"><a href="#">PAGES</a>
                                     <ul class="sub-menu">
-                                        <li class="menu-item-has-children"><a href="/faq">FAQ</a></li>
-                                        <li class="menu-item-has-children"><a href="/blogs">BLOGS</a></li>
+                                        <li><a href="/faq">FAQ</a></li>
+                                        <li><a href="/blogs">BLOG</a></li>
                                     </ul>
                                 </li>
 
@@ -49,59 +50,39 @@
                             </li>
                             <li>
                                 <div class="header-cart-icon">
-                                    <a href="#" id="minicart-trigger">
+                                    <a href="/login-register" th:if="${session.userLogin == null}">
                                         <i class="ion-bag"></i>
-                                        <span class="counter">3</span>
+                                    </a>
+                                    <a href="#" id="minicart-trigger" th:if="${session.userLogin != null}">
+                                        <i class="ion-bag"></i>
+                                        <span class="counter"
+                                              th:text="${session.cartList.size()}"></span>
                                     </a>
                                     <!-- mini cart  -->
                                     <div class="mini-cart" id="mini-cart">
                                         <div class="cart-items-wrapper ps-scroll">
-                                            <div class="single-cart-item">
-                                                <a href="javascript:void(0)" class="remove-icon"><i
-                                                        class="ion-android-close"></i></a>
+                                            <div class="single-cart-item" th:each="item : ${session.cartList}">
+                                                <a th:href="@{/remove-item/{id}(id = ${item.cardId})}" class="remove-icon">
+                                                    <i class="ion-android-close"></i>
+                                                </a>
                                                 <div class="image">
-                                                    <a href="single-product.html">
+                                                    <a th:href="@{/detail/{id}(id = ${item.product.productId})}">
                                                         <img width="80" height="106"
-                                                             src="assets/img/products/product-1-80x106.webp"
+                                                             th:src="${item.product.imageUrl}"
                                                              class="img-fluid" alt="">
                                                     </a>
                                                 </div>
                                                 <div class="content">
-                                                    <p class="product-title"><a href="single-product.html">Cillum
-                                                        dolore furniture</a></p>
-                                                    <p class="count"><span>1 x </span> $402</p>
-                                                </div>
-                                            </div>
-                                            <div class="single-cart-item">
-                                                <a href="javascript:void(0)" class="remove-icon"><i
-                                                        class="ion-android-close"></i></a>
-                                                <div class="image">
-                                                    <a href="single-product.html">
-                                                        <img width="80" height="106"
-                                                             src="assets/img/products/product-2-80x106.webp"
-                                                             class="img-fluid" alt="">
-                                                    </a>
-                                                </div>
-                                                <div class="content">
-                                                    <p class="product-title"><a href="single-product.html">Lorem
-                                                        ipsum furniture</a></p>
-                                                    <p class="count"><span>1 x </span> $500</p>
-                                                </div>
-                                            </div>
-                                            <div class="single-cart-item">
-                                                <a href="javascript:void(0)" class="remove-icon"><i
-                                                        class="ion-android-close"></i></a>
-                                                <div class="image">
-                                                    <a href="single-product.html">
-                                                        <img width="80" height="106"
-                                                             src="assets/img/products/product-3-80x106.webp"
-                                                             class="img-fluid" alt="">
-                                                    </a>
-                                                </div>
-                                                <div class="content">
-                                                    <p class="product-title"><a href="single-product.html">Cillum
-                                                        dolore tool</a></p>
-                                                    <p class="count"><span>1 x </span> $607</p>
+                                                    <p class="product-title">
+                                                        <a th:href="@{/detail/{id}(id = ${item.product.productId})}">
+                                                            <span th:text="${item.product.productName}"></span>
+                                                        </a>
+                                                    </p>
+                                                    <p class="count">
+                                                        <span th:text="${item.quantity}"></span>
+                                                        <span> x </span>
+                                                        <span th:text="${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -109,27 +90,16 @@
                                             <table class="table">
                                                 <tbody>
                                                 <tr>
-                                                    <td class="text-start">Sub-Total :</td>
-                                                    <td class="text-end">$220.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-start">Eco Tax (-2.00) :</td>
-                                                    <td class="text-end">$6.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-start">VAT (20%) :</td>
-                                                    <td class="text-end">$44.00</td>
-                                                </tr>
-                                                <tr>
                                                     <td class="text-start">Total :</td>
-                                                    <td class="text-end">$270.00</td>
+                                                    <td class="text-end"
+                                                        th:text="${#numbers.formatDecimal(session.total, 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                         <div class="cart-buttons">
-                                            <a href="cart.html">VIEW CART</a>
-                                            <a href="checkout.html">CHECKOUT</a>
+                                            <a href="/cart">VIEW CART</a>
+                                            <a href="/checkout">CHECKOUT</a>
                                         </div>
                                     </div>
                                 </div>
@@ -138,12 +108,13 @@
                                 <div class="header-settings-icon">
                                     <a href="javascript:void(0)" class="header-settings-trigger"
                                        id="header-settings-trigger">
-                                        <div class="setting-button"  th:if="${session.userLogin == null}">
+                                        <div class="setting-button" th:if="${session.userLogin == null}">
                                             <span></span>
                                             <span></span>
                                             <span></span>
                                         </div>
-                                        <img th:src="${session.userLogin.getAvatar()}" th:unless="${session.userLogin == null}" width="50px">
+                                        <img th:src="${session.userLogin.getAvatar()}"
+                                             th:unless="${session.userLogin == null}" width="50px">
                                     </a>
 
                                     <!-- settings menu -->
@@ -155,7 +126,9 @@
                                             </ul>
                                         </div>
                                         <div class="single-settings-block" th:unless="${session.userLogin == null}">
-                                            <h4 class="title"><span th:text="${'Xin chào, ' + session.userLogin.userName }" class="text-warning"></span></h4>
+                                            <h4 class="title"><span
+                                                    th:text="${'Xin chào, ' + session.userLogin.userName }"
+                                                    class="text-warning"></span></h4>
                                             <ul>
                                                 <li><a href="/my-account">Information</a></li>
                                                 <li><a href="/wishlist">Wish List</a></li>

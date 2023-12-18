@@ -8,6 +8,7 @@ import com.project.model.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +18,14 @@ public class CategoryServiceIMPL implements ICategoryService {
     private ICategoryDAO categoryDAO;
     @Autowired
     private IProductService productService;
+    @Autowired
+    private HttpSession session;
 
     @Override
     public List<Category> findAll() {
-        return categoryDAO.findAll();
+        List<Category> categories = categoryDAO.findAll();
+        session.setAttribute("categoryList", categories);
+        return categories;
     }
 
     @Override

@@ -21,10 +21,10 @@
                 <div class="breadcrumb-wrapper breadcrumb-bg">
                     <!--=======  breadcrumb content  =======-->
                     <div class="breadcrumb-content">
-                        <h2 class="breadcrumb-content__title">Single Product</h2>
+                        <h2 class="breadcrumb-content__title">Product Details</h2>
                         <ul class="breadcrumb-content__page-map">
-                            <li><a href="index.html">Home</a></li>
-                            <li class="active">Single Product</li>
+                            <li><a href="/">Home</a></li>
+                            <li class="active">Product Details</li>
                         </ul>
                     </div>
                     <!--=======  End of breadcrumb content  =======-->
@@ -69,8 +69,9 @@
                                 <div class="col-lg-6">
                                     <!--=======  single product content description  =======-->
                                     <div class="single-product-content-description">
-                                        <p class="single-info">Category <a th:href="@{/category/{id}(id=${product.category.categoryId})}"
-                                                                           th:text="${product.category.categoryName}"></a>
+                                        <p class="single-info">Category <a
+                                                th:href="@{/category/{id}(id=${product.category.categoryId})}"
+                                                th:text="${product.category.categoryName}"></a>
                                         </p>
                                         <h4 class="product-title"><span th:text="${product.productName}"></span></h4>
                                         <div class="product-rating">
@@ -87,7 +88,9 @@
                                         </div>
 
                                         <p class="single-grid-product__price">
-                                            <span class="main-price " th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span></p>
+                                            <span class="main-price "
+                                                  th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                                        </p>
 
                                         <p class="single-info">
                                             Product Code: <span class="value" th:text="${product.productId}"></span>
@@ -96,24 +99,29 @@
                                             Reward Points: <span class="value">200</span>
                                         </p>
                                         <p class="single-info">
-                                            Availability: <span class="value" th:text="${product.stock > 0 ? 'In Stock' : 'Out of Stock'}"></span>
+                                            Availability: <span class="value"
+                                                                th:text="${product.stock > 0 ? 'In Stock' : 'Out of Stock'}"></span>
                                         </p>
                                         <p class="product-description">
                                             <span th:text="${product.description}"></span>
                                         </p>
 
                                         <div class="product-actions">
-                                            <form>
+                                            <form method="post" action="/add-to-cart">
                                                 <div class="quantity-selection">
+                                                    <input type="hidden" th:value="${product.productId}" name="productId">
                                                     <label>Qty</label>
-                                                    <input type="number" value="1" min="1">
+                                                    <input type="number" value="1" min="1" name="quantity">
                                                 </div>
 
-                                                <div class="product-buttons">
-                                                    <button class="cart-btn"> <i class="ion-bag"></i> ADD TO
-                                                        CART</button>
+                                                <div class="product-buttons mt-2">
+                                                    <button type="submit" class="cart-btn"><i class="ion-bag"></i> ADD TO
+                                                        CART
+                                                    </button>
                                                     <span class="wishlist-compare-btn">
-                                                        <a><i class="fa-regular fa-heart"></i></a>
+                                                        <a th:href="@{/wishlist/{id}(id = ${product.productId})}">
+                                                            <i class="fa-regular fa-heart"></i>
+                                                        </a>
                                                         <a> <i class="ion-android-options"></i></a>
                                                     </span>
                                                 </div>

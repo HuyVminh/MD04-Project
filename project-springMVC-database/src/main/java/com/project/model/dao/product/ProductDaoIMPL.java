@@ -198,4 +198,21 @@ public class ProductDaoIMPL implements IProductDAO {
         }
         return products;
     }
+
+    @Override
+    public void updateStock(int productId, int quantity) {
+        Connection connection = null;
+        connection = ConnectionDatabase.openConnection();
+        CallableStatement callableStatement = null;
+        try {
+            callableStatement = connection.prepareCall("{CALL PROC_UPDATE_QUANTITY_PRODUCT(?,?)}");
+            callableStatement.setInt(1, productId);
+            callableStatement.setInt(2, quantity);
+            callableStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+    }
 }

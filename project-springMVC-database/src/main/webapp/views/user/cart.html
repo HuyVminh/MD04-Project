@@ -43,131 +43,74 @@
                 <!--=======  page wrapper  =======-->
                 <div class="page-wrapper">
                     <div class="page-content-wrapper">
-                        <form action="#">
-                            <!--=======  cart table  =======-->
 
-                            <div class="cart-table table-responsive">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th class="pro-thumbnail">Image</th>
-                                        <th class="pro-title">Product</th>
-                                        <th class="pro-price">Price</th>
-                                        <th class="pro-quantity">Quantity</th>
-                                        <th class="pro-subtotal">Total</th>
-                                        <th class="pro-remove">Remove</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="single-product.html"><img
-                                                width="600" height="800" src="assets/img/products/big1-1.webp"
-                                                class="img-fluid"
-                                                alt="Product"></a></td>
-                                        <td class="pro-title"><a href="single-product.html">Cillum dolore tortor
-                                            nisl fermentum</a></td>
-                                        <td class="pro-price"><span>$29.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="quantity-selection"><input type="number" value="1"
-                                                                                   min="1"></div>
-                                        </td>
-                                        <td class="pro-subtotal"><span>$29.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="single-product.html"><img
-                                                width="600" height="800" src="assets/img/products/big1-2.webp"
-                                                class="img-fluid"
-                                                alt="Product"></a></td>
-                                        <td class="pro-title"><a href="single-product.html">Auctor gravida
-                                            pellentesque</a></td>
-                                        <td class="pro-price"><span>$30.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="quantity-selection"><input type="number" value="1"
-                                                                                   min="1"></div>
-                                        </td>
-                                        <td class="pro-subtotal"><span>$60.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="single-product.html"><img
-                                                width="600" height="800" src="assets/img/products/big1-3.webp"
-                                                class="img-fluid"
-                                                alt="Product"></a></td>
-                                        <td class="pro-title"><a href="single-product.html">Condimentum posuere
-                                            consectetur</a></td>
-                                        <td class="pro-price"><span>$25.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="quantity-selection"><input type="number" value="1"
-                                                                                   min="1"></div>
-                                        </td>
-                                        <td class="pro-subtotal"><span>$25.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="pro-thumbnail"><a href="single-product.html"><img
-                                                width="600" height="800" src="assets/img/products/big1-4.webp"
-                                                class="img-fluid"
-                                                alt="Product"></a></td>
-                                        <td class="pro-title"><a href="single-product.html">Habitasse dictumst
-                                            elementum</a></td>
-                                        <td class="pro-price"><span>$11.00</span></td>
-                                        <td class="pro-quantity">
-                                            <div class="quantity-selection"><input type="number" value="1"
-                                                                                   min="1"></div>
-                                        </td>
-                                        <td class="pro-subtotal"><span>$11.00</span></td>
-                                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                        <!--=======  cart table  =======-->
+
+                        <div class="cart-table table-responsive">
+                            <div th:if="${err!=null}"
+                                 class="alert alert-danger alert-dismissible fade show"
+                                 role="alert" id="alertMessageErr">
+                                <strong th:text="${err}"></strong>
                             </div>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="pro-thumbnail">Image</th>
+                                    <th class="pro-title">Product</th>
+                                    <th class="pro-price">Price</th>
+                                    <th class="pro-quantity">Quantity</th>
+                                    <th class="pro-subtotal">Total</th>
+                                    <th class="pro-remove" colspan="2">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-                            <!--=======  End of cart table  =======-->
+                                    <tr th:each="item : ${session.cartList}">
+                                        <td class="pro-thumbnail"><a
+                                                th:href="@{/detail/{id}(id = ${item.product.productId})}"><img
+                                                width="600" height="800" th:src="${item.product.imageUrl}"
+                                                style="border-radius: 10px;"
+                                                class="img-fluid"
+                                                alt="Product"></a></td>
+                                        <td class="pro-title">
+                                            <a th:href="@{/detail/{id}(id = ${item.product.productId})}">
+                                                <span th:text="${item.product.productName}"></span>
+                                            </a>
+                                        </td>
+                                        <td class="pro-price">
+                                            <span th:text="${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                                        </td>
+                                        <form action="/update-cart-by-id" method="post">
+                                        <td class="pro-quantity">
+                                            <div class="quantity-selection">
+                                                <input type="hidden" th:value="${item.cardId}" name="cartId">
+                                                <input type="number" th:value="${item.quantity}" min="1" name="qty">
+                                            </div>
+                                        </td>
+                                        <td class="pro-subtotal">
+                                            <span th:text="${#numbers.formatDecimal((item.quantity*item.product.price), 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                                        </td>
+                                        <td>
+                                            <button type="submit" style="border: none;background: transparent;"><i
+                                                    class="fa-solid fa-arrows-rotate"></i></button>
+                                        </td>
+                                        </form>
+                                        <td class="pro-remove">
+                                            <a th:href="@{/remove-item/{id}(id = ${item.getCardId()})}"><i
+                                                    class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
 
+                                </tbody>
+                            </table>
+                        </div>
 
-                        </form>
+                        <!--=======  End of cart table  =======-->
+
 
                         <div class="row">
 
                             <div class="col-lg-6 col-12">
-                                <!--=======  Calculate Shipping  =======-->
-
-                                <div class="calculate-shipping">
-                                    <h4>Calculate Shipping</h4>
-                                    <form action="#">
-                                        <div class="row">
-                                            <div class="col-md-6 col-12">
-                                                <select class="nice-select">
-                                                    <option>Bangladesh</option>
-                                                    <option>China</option>
-                                                    <option>country</option>
-                                                    <option>India</option>
-                                                    <option>Japan</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6 col-12">
-                                                <select class="nice-select">
-                                                    <option>Dhaka</option>
-                                                    <option>Barisal</option>
-                                                    <option>Khulna</option>
-                                                    <option>Comilla</option>
-                                                    <option>Chittagong</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6 col-12">
-                                                <input type="text" placeholder="Postcode / Zip">
-                                            </div>
-                                            <div class="col-md-6 col-12">
-                                                <input type="submit" value="Estimate">
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
 
                                 <!--=======  End of Calculate Shipping  =======-->
 
@@ -198,13 +141,21 @@
                                 <div class="cart-summary">
                                     <div class="cart-summary-wrap">
                                         <h4>Cart Summary</h4>
-                                        <p>Sub Total <span>$1250.00</span></p>
-                                        <p>Shipping Cost <span>$00.00</span></p>
-                                        <h2>Grand Total <span>$1250.00</span></h2>
+                                        <p>Sub Total <span
+                                                th:text="${#numbers.formatDecimal(session.total, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                                        </p>
+                                        <p>Shipping Cost <span>0.00 VND</span></p>
+                                        <h2>Grand Total <span
+                                                th:text="${#numbers.formatDecimal(session.total, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                                        </h2>
                                     </div>
                                     <div class="cart-summary-button">
-                                        <button class="checkout-btn">Checkout</button>
-                                        <button class="update-btn">Update Cart</button>
+                                        <a href="/checkout">
+                                            <button class="checkout-btn">Checkout</button>
+                                        </a>
+                                        <a href="/list-product">
+                                            <button class="reply-btn">Shopping</button>
+                                        </a>
                                     </div>
                                 </div>
 
@@ -453,6 +404,13 @@
 
 <!-- Active JS -->
 <script th:src="@{/assets/js/active.js}"></script>
+
+<!-- set time message display off JS -->
+<script>
+    setTimeout(function () {
+        document.getElementById("alertMessageErr").style.display = "none";
+    }, 10000);
+</script>
 
 <!--=====  End of JS files ======-->
 

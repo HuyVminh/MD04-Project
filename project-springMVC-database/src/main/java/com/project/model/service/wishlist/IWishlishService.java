@@ -8,4 +8,5 @@ public interface IWishlishService {
     List<Wishlist> findAllByUserId(Integer id);
     boolean addToWishlist(int userId,int productId);
     boolean removeFromWishlist(int userId,int productId);
+    boolean checkProductInWishlist(int userId,int productId);
 }

@@ -1,10 +1,8 @@
 package com.project.controller.user;
 
 import com.project.model.dto.user.UserRegisterDTO;
-import com.project.model.entity.Category;
-import com.project.model.entity.Product;
-import com.project.model.entity.User;
-import com.project.model.entity.Wishlist;
+import com.project.model.entity.*;
+import com.project.model.service.cart.ICartService;
 import com.project.model.service.category.ICategoryService;
 import com.project.model.service.product.IProductService;
 import com.project.model.service.user.IUserService;
@@ -44,36 +42,8 @@ public class UserController {
     private ICategoryService categoryService;
     @Autowired
     private IWishlishService wishlishService;
-
-    @RequestMapping("/about")
-    public String getAbout() {
-        return "user/about";
-    }
-
-    @RequestMapping("/contact")
-    public String getContact() {
-        return "user/contact";
-    }
-
-    @RequestMapping("/faq")
-    public String getFaq() {
-        return "user/faq";
-    }
-
-    @RequestMapping("/blogs")
-    public String getBlog() {
-        return "user/blog";
-    }
-
-    @RequestMapping("/cart")
-    public String getCart() {
-        return "user/cart";
-    }
-
-    @RequestMapping("/checkout")
-    public String getCheckout(Model model) {
-        return "user/checkout";
-    }
+    @Autowired
+    private ICartService cartService;
 
     @GetMapping("/list-product")
     public String getListProduct(Model model) {
@@ -105,11 +75,28 @@ public class UserController {
     @RequestMapping("/wishlist")
     public String getWishlist(Model model) {
         User userLogin = (User) session.getAttribute("userLogin");
-        if(userLogin!=null){
+        if (userLogin != null) {
             List<Wishlist> list = wishlishService.findAllByUserId(userLogin.getUserId());
             model.addAttribute("wishlist", list);
         }
         return "user/wishlist";
+    }
+
+    @GetMapping("/wishlist/{id}")
+    public String addWishlist(@PathVariable("id") int id) {
+        System.out.println(id);
+        User userLogin = (User) session.getAttribute("userLogin");
+        if (userLogin == null) {
+            return "redirect:/login-register";
+        }else {
+            if(!wishlishService.checkProductInWishlist(userLogin.getUserId(),id)){
+                wishlishService.addToWishlist(userLogin.getUserId(), id);
+            }else {
+                wishlishService.removeFromWishlist(userLogin.getUserId(),id);
+            }
+            return "redirect:/wishlist";
+
+        }
     }
 
     @GetMapping("/login-register")
@@ -151,6 +138,15 @@ public class UserController {
             if (BCrypt.checkpw(user.getPassword(), user_check.getPassword()) && user_check.isRole()) {
                 if (user_check.isStatus()) {
                     session.setAttribute("userLogin", user_check);
+                    List<Category> categories = categoryService.getCategoryList();
+                    session.setAttribute("categoryList", categories);
+                    List<Cart> cartList = cartService.findCartByUserId(user_check.getUserId());
+                    session.setAttribute("cartList", cartList);
+                    float total = 0;
+                    for (Cart cart : cartList) {
+                        total += cart.getQuantity()*cart.getProduct().getPrice();
+                    }
+                    session.setAttribute("total",total);
                     return "redirect:/";
                 } else {
                     redirectAttributes.addFlashAttribute("err", "Tài khoản của bạn đã bị khóa !");
@@ -199,13 +195,13 @@ public class UserController {
             }
             User user = (User) session.getAttribute("userLogin");
             System.out.println(user.getPassword());
-            if (BCrypt.checkpw(userLogin.getPassword(),user.getPassword())){
+            if (BCrypt.checkpw(userLogin.getPassword(), user.getPassword())) {
                 if (userService.update(userLogin)) {
                     session.setAttribute("userLogin", userLogin);
                     redirectAttributes.addFlashAttribute("mess", "Cập nhật thông tin thành công !");
                     return "redirect:/my-account";
                 }
-            }else {
+            } else {
                 redirectAttributes.addFlashAttribute("err", "Mật khẩu không khớp !");
                 return "redirect:/my-account";
             }
@@ -213,9 +209,5 @@ public class UserController {
             throw new RuntimeException(e);
         }
         return "user/my-account";
-    }
-    @GetMapping("/addToWishlist")
-    public String addToWishlist(){
-        return "user/wishlist";
     }
 }
