@@ -13,4 +13,8 @@ public interface IProductDAO {
     boolean checkProductName(String productName);
     List<Product> getLastestProduct();
     void updateStock(int productId, int quantity);
+    List<Product> showAllWithPagination(int limit, int currenPage);
+    List<Product> findByNameWithPagination(String name, int limit, int currenPage);
+    Integer getTotalPagesOnShowAll(int limit, int currenPage);
+    Integer getTotalPagesOnSearch(int limit, String name);
 }

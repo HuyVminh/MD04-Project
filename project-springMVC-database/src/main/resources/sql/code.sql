@@ -60,14 +60,6 @@ create table product
     status      boolean default true
 );
 
-CREATE TABLE image
-(
-    image_id   INT PRIMARY KEY auto_increment,
-    product_id INT,
-    image_url  VARCHAR(255) not null,
-    FOREIGN KEY (product_id) REFERENCES product (id)
-);
-
 delimiter //
 create procedure PROC_SHOW_PRODUCT()
 begin
@@ -136,8 +128,32 @@ begin
     update product set stock = stock - p_qty where id = p_id;
 end
 //
--- --------------------------------------------------------
+DELIMITER //
+CREATE PROCEDURE PROC_PRODUCT_FIND_PAGED(
+    IN p_name VARCHAR(100),
+    IN p_limit INT,
+    IN current_page INT)
+BEGIN
+    DECLARE offset_value INT;
 
+    SET offset_value = (current_page - 1) * p_limit;
+    SELECT *
+    FROM product
+    WHERE LCASE(name) LIKE CONCAT('%', LCASE(p_name), '%')
+       OR LCASE(description) LIKE CONCAT('%', LCASE(p_name), '%')
+    LIMIT p_limit OFFSET offset_value;
+END //
+DELIMITER //
+CREATE PROCEDURE PROC_PRODUCT_PAGINATION(IN p_limit int, IN current_page int, OUT total_page int)
+begin
+    DECLARE offset_page int;
+    SET offset_page = (current_page - 1) * p_limit;
+    SET total_page = CEIL((SELECT count(*) from product) / p_limit);
+    SELECT * FROM product LIMIT p_limit offset offset_page;
+end //
+DELIMITER ;
+-- --------------------------------------------------------
+select * from order_details where id = 4;
 -- ------------------------USER----------------------------
 create table user
 (
@@ -373,7 +389,7 @@ end
 delimiter //
 create procedure PROC_SHOW_ORDER()
 begin
-    select * from orders;
+    select * from orders order by created_date desc;
 end
 //
 
@@ -399,3 +415,5 @@ begin
     select * from orders where user_id = u_id;
 end
 //
+
+select price from product group by price;

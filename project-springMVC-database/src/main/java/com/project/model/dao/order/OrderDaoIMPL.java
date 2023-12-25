@@ -10,10 +10,12 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 @Repository
 public class OrderDaoIMPL implements IOrderDAO {
     @Autowired
     private IUserDAO userDAO;
+
     @Override
     public List<Order> findAll() {
         Connection connection = null;
@@ -48,7 +50,7 @@ public class OrderDaoIMPL implements IOrderDAO {
     public Integer saveOrder(Order order) {
         Connection connection = null;
         connection = ConnectionDatabase.openConnection();
-        int orderId=0;
+        int orderId = 0;
         try {
             CallableStatement callableStatement = connection.prepareCall("{CALL PROC_SAVE_ORDER(?,?,?,?,?,?,?)}");
             callableStatement.setInt(1, order.getUser().getUserId());

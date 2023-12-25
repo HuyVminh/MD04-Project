@@ -38,7 +38,6 @@ public class UserServiceIMPL implements IUserService {
         user1.setPhone(user.getPhone());
         String hashPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12));
         user1.setPassword(hashPassword);
-        user1.setAvatar("http://localhost:8080/uploads/avatars/default-avatar.jpg");
         return userDAO.register(user1);
     }
 

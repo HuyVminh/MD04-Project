@@ -28,6 +28,7 @@ public class OrdersController {
     @GetMapping("/orders/details/{id}")
     public String getOrderDetails(@PathVariable("id") int id, Model model) {
         List<OrderDetail> orderDetailList = orderService.findDetailByOrderId(id);
+        System.out.println(orderDetailList.size());
         Order order = orderService.findOrderById(id);
         model.addAttribute("orderDetailList", orderDetailList);
         model.addAttribute("order", order);

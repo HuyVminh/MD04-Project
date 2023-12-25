@@ -113,8 +113,9 @@
                                             <span></span>
                                             <span></span>
                                         </div>
-                                        <img th:src="${session.userLogin.getAvatar()}"
-                                             th:unless="${session.userLogin == null}" width="50px">
+                                        <div th:unless="${session.userLogin == null}">
+                                            <img width="50px" th:src="${session.userLogin.avatar}" style="border-radius: 10px">
+                                        </div>
                                     </a>
 
                                     <!-- settings menu -->

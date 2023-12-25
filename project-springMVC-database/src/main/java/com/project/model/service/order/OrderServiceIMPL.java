@@ -37,7 +37,6 @@ public class OrderServiceIMPL implements IOrderService {
                 orderDetailDAO.save(orderDetail);
             }
             return true;
-
         }catch (Exception e) {
             e.printStackTrace();
         }

@@ -34,12 +34,12 @@ public class ProductController {
     @Autowired
     ServletContext servletContext;
 
-    @RequestMapping("/product")
-    public String getProduct(Model model) {
-        List<Product> products = productService.findAll();
-        model.addAttribute("products", products);
-        return "admin/product/product";
-    }
+//    @RequestMapping("/product")
+//    public String getProduct(Model model) {
+//        List<Product> products = productService.findAll();
+//        model.addAttribute("products", products);
+//        return "admin/product/product";
+//    }
 
     @GetMapping("/product/add-product")
     public String openAddProduct(Model model) {
@@ -62,7 +62,7 @@ public class ProductController {
         try {
             file.transferTo(destination);
             product.setImageUrl("http://localhost:8080/uploads/images/" + fileName);
-            if (productService.checkProductName(product.getProductName())){
+            if (productService.checkProductName(product.getProductName())) {
                 redirectAttributes.addFlashAttribute("err", "Tên sản phẩm đã tồn tại !");
                 return "redirect:/admin/product/add-product";
             }
@@ -99,7 +99,7 @@ public class ProductController {
                 file.transferTo(destination);
                 product.setImageUrl("http://localhost:8080/uploads/images/" + fileName);
             }
-            if (productService.checkProductName(product.getProductName())){
+            if (productService.checkProductName(product.getProductName())) {
                 redirectAttributes.addFlashAttribute("err", "Tên sản phẩm đã tồn tại, không thể cập nhật sản phẩm !");
                 return "redirect:/admin/product";
             }
@@ -111,12 +111,32 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/product/block/{id}")
     public String blockProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         productService.block(id);
         redirectAttributes.addFlashAttribute("mess", "Cập nhật thành công !");
         return "redirect:/admin/product";
     }
+
+    @GetMapping({"/product", "/product/{i}"})
+    public String showProductWithPagination(@PathVariable(value = "i", required = false) Integer i, @RequestParam(value = "name-search", required = false) String nameSearch, RedirectAttributes redirectAttributes, Model model) {
+        List<Product> productList = new ArrayList<>();
+        int currentPage = (i != null ? i : 1);
+        int totalPage;
+        if (nameSearch == null || nameSearch.isEmpty()) {
+            productList = productService.showAllWithPagination(7, currentPage);
+            totalPage = productService.getTotalPagesOnShowAll(7, currentPage);
+        } else {
+            productList = productService.findByNameWithPagination(nameSearch, 7, currentPage);
+            totalPage = (int) Math.ceil((double) productService.findByName(nameSearch).size() /7);
+        }
+        model.addAttribute("products", productList);
+        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("currentPage",currentPage);
+        model.addAttribute("nameSearch",nameSearch);
+        return "/admin/product/product";
+    }
+
     private List<Category> getCategories() {
         List<Category> categoryList = categoryService.findAll();
         List<Category> categoryListTrue = new ArrayList<>();

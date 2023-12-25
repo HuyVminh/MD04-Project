@@ -59,10 +59,12 @@
                                 <a class="navbar-brand" href="/admin/product/add-product">
                                     <button type="button" class="btn btn-success">+ Add new Product</button>
                                 </a>
-                                <form class="d-flex" role="search">
+                                <form class="d-flex" role="search"
+                                      th:action="@{/admin/product}" method="get">
                                     <input class="form-control me-2 fst-italic" type="search"
                                            placeholder="Enter product's name... "
-                                           aria-label="Search">
+                                           aria-label="Search"
+                                           name="name-search" th:value="${nameSearch}">
                                     <button class="btn btn-outline-success" type="submit">Search</button>
                                 </form>
                             </div>
@@ -106,7 +108,7 @@
                                 <td>
                                     <a type="button" class="btn"
                                        th:classappend="${item.isStatus()?'btn-success':'btn-danger'}"
-                                       th:href="@{/admin/product/{productId}(productId=${item.productId})}"
+                                       th:href="@{/admin/product/block/{productId}(productId=${item.productId})}"
                                        th:attr="onclick=${item.isStatus() ? 'return confirm(`Bạn có chắc muốn khóa danh mục này ?`)' : 'return confirm(`Bạn có chắc muốn mở khóa danh mục này ?`)' }">
                                         <span th:text="${item.isStatus() ? 'Active' : 'Block'}"></span>
                                     </a>
@@ -120,16 +122,44 @@
                         </table>
                     </div>
                     <!-- /.card-body -->
-                    <nav aria-label="Page navigation example ">
+                    <nav aria-label="Page navigation example " th:if="${nameSearch==null}">
                         <ul class="pagination float-end mx-4">
                             <li class="page-item disabled">
-                                <a class="page-link">Previous</a>
+                                <a class="page-link"
+                                   th:href="@{${'/admin/product/' + (currentPage > 1 ? (currentPage - 1) : 1)}}"
+                                   th:classappend="${i == 1 ? 'disabled' : ''}">Previous</a>
                             </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPage)}">
+                                <a class="page-link" th:href="@{${'/admin/product/' + i}}"
+                                   th:classappend="${i==currentPage?'active':''}">
+                                    <span th:text="${i}"></span>
+                                </a>
+                            </li>
                             <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
+                                <a class="page-link"
+                                   th:href="@{${'/admin/product/' + (currentPage > 1 ? (currentPage - 1) : 1)}}"
+                                   th:classappend="${i == totalPage ? 'disabled' : ''}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <nav aria-label="Page navigation example " th:unless="${nameSearch==null}">
+                        <ul class="pagination float-end mx-4">
+                            <li class="page-item disabled">
+                                <a class="page-link"
+                                   th:href="@{${'/admin/product/' + ((currentPage > 1) ? (currentPage - 1) : 1)}(name-search=${nameSearch})}"
+                                   th:classappend="${i == 1 ? 'disabled' : ''}">Previous</a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPage)}">
+                                <a class="page-link"
+                                   th:href="@{${'/admin/product/' + i}(name-search=${nameSearch})}"
+                                   th:classappend="${i==currentPage?'active':''}">
+                                    <span th:text="${i}"></span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link"
+                                   th:href="@{${'/admin/product/' + (currentPage < totalPage ? (currentPage + 1) : totalPage)}(name-search=${nameSearch})}"
+                                   th:classappend="${i == totalPage ? 'disabled' : ''}">Next</a>
                             </li>
                         </ul>
                     </nav>

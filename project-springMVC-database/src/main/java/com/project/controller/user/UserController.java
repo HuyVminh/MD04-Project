@@ -18,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -112,7 +111,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String handleRegister(@Valid @ModelAttribute("user") UserRegisterDTO user, BindingResult result, HttpSession session, MultipartFile file) {
+    public String handleRegister(@Valid @ModelAttribute("user") UserRegisterDTO user, BindingResult result, MultipartFile file) {
         if (result.hasErrors()) {
             return "/user/login-register";
         } else {
@@ -121,8 +120,9 @@ public class UserController {
                 return "/user/login-register";
             } else {
                 if (userService.register(user)) {
-                    User user1 = new ModelMapper().map(user, User.class);
-                    session.setAttribute("userLogin", user1);
+                    User newUser = new ModelMapper().map(user, User.class);
+                    newUser.setAvatar("http://localhost:8080/uploads/avatars/default-avatar.jpg");
+                    session.setAttribute("userLogin", newUser);
                     return "redirect:/";
                 }
             }

@@ -7,10 +7,7 @@ import com.project.util.ConnectionDatabase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -214,5 +211,121 @@ public class ProductDaoIMPL implements IProductDAO {
         }finally {
             ConnectionDatabase.closeConnection(connection);
         }
+    }
+
+    @Override
+    public List<Product> showAllWithPagination(int limit, int currenPage) {
+        Connection connection = null;
+        List<Product> products = new ArrayList<>();
+        try {
+            connection = ConnectionDatabase.openConnection();
+            CallableStatement callableStatement = connection.prepareCall("{CALL PROC_PRODUCT_PAGINATION(?,?,?)}");
+            callableStatement.setInt(1,limit);
+            callableStatement.setInt(2,currenPage);
+            callableStatement.registerOutParameter(3, Types.INTEGER);
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setProductId(resultSet.getInt("id"));
+                product.setProductName(resultSet.getString("name"));
+                product.setDescription(resultSet.getString("description"));
+                product.setPrice(resultSet.getFloat("price"));
+                product.setStock(resultSet.getInt("stock"));
+                product.setImageUrl(resultSet.getString("image"));
+                Category category = categoryDAO.findById(resultSet.getInt("category_id"));
+                product.setCategory(category);
+                product.setStatus(resultSet.getBoolean("status"));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+        return products;
+    }
+
+    @Override
+    public List<Product> findByNameWithPagination(String name, int limit, int currenPage) {
+        Connection connection = null;
+        List<Product> foundList = new ArrayList<>();
+        try {
+            connection = ConnectionDatabase.openConnection();
+            CallableStatement callableStatement = connection.prepareCall("{CALL PROC_PRODUCT_FIND_PAGED(?,?,?)}");
+            String nameSearch = name.toLowerCase().trim();
+            callableStatement.setString(1, nameSearch);
+            callableStatement.setInt(2, limit);
+            callableStatement.setInt(3, currenPage);
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setProductId(resultSet.getInt("id"));
+                product.setProductName(resultSet.getString("name"));
+                product.setDescription(resultSet.getString("description"));
+                product.setPrice(resultSet.getFloat("price"));
+                product.setStock(resultSet.getInt("stock"));
+                product.setImageUrl(resultSet.getString("image"));
+                Category category = categoryDAO.findById(resultSet.getInt("category_id"));
+                product.setCategory(category);
+                product.setStatus(resultSet.getBoolean("status"));
+                foundList.add(product);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+        return foundList;
+    }
+
+    @Override
+    public Integer getTotalPagesOnShowAll(int limit, int currenPage) {
+        Connection connection = null;
+        try {
+            connection = ConnectionDatabase.openConnection();
+            CallableStatement callableStatement = connection.prepareCall("{CALL PROC_PRODUCT_PAGINATION(?,?,?)}");
+            callableStatement.setInt(1,limit);
+            callableStatement.setInt(2,currenPage);
+            callableStatement.registerOutParameter(3, Types.INTEGER);
+            callableStatement.executeQuery();
+            return callableStatement.getInt(3);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public Integer getTotalPagesOnSearch(int limit, String name) {
+        Connection connection = null;
+        List<Product> foundList = new ArrayList<>();
+        int total;
+        try {
+            connection = ConnectionDatabase.openConnection();
+            CallableStatement callableStatement = connection.prepareCall("{CALL PROC_FIND_PRODUCT_BY_NAME(?)}");
+            String nameSearch = name.toLowerCase().trim();
+            callableStatement.setString(1, nameSearch);
+            ResultSet resultSet = callableStatement.executeQuery();
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setProductId(resultSet.getInt("id"));
+                product.setProductName(resultSet.getString("name"));
+                product.setDescription(resultSet.getString("description"));
+                product.setPrice(resultSet.getFloat("price"));
+                product.setStock(resultSet.getInt("stock"));
+                product.setImageUrl(resultSet.getString("image"));
+                Category category = categoryDAO.findById(resultSet.getInt("category_id"));
+                product.setCategory(category);
+                product.setStatus(resultSet.getBoolean("status"));
+                foundList.add(product);
+            }
+            total = (int) Math.ceil((double) foundList.size() /limit);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionDatabase.closeConnection(connection);
+        }
+        return total;
     }
 }

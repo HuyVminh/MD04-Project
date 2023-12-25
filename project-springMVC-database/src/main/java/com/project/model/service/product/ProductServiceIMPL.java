@@ -46,4 +46,24 @@ public class ProductServiceIMPL implements IProductService {
     public List<Product> getLastestProduct() {
         return productDAO.getLastestProduct();
     }
+
+    @Override
+    public List<Product> showAllWithPagination(int limit, int currenPage) {
+        return productDAO.showAllWithPagination(limit, currenPage);
+    }
+
+    @Override
+    public List<Product> findByNameWithPagination(String name, int limit, int currenPage) {
+        return productDAO.findByNameWithPagination(name, limit, currenPage);
+    }
+
+    @Override
+    public Integer getTotalPagesOnShowAll(int limit, int currenPage) {
+        return productDAO.getTotalPagesOnShowAll(limit, currenPage);
+    }
+
+    @Override
+    public Integer getTotalPagesOnSearch(int limit, String name) {
+        return getTotalPagesOnSearch(limit, name);
+    }
 }
